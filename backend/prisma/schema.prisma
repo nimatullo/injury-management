@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id                   String          @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  position             String
+  number               Int
+  injuries             Injury[]
+  upcomingAppointments Appointment[]
+  PainLevel            PainLevel[]
+  RangeOfMotion        RangeOfMotion[]
+  Endurance            Endurance[]
+}
+
+model PainLevel {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  painLevel Int
+  date      DateTime
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String   @db.ObjectId
+}
+
+model RangeOfMotion {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  range    Float
+  date     DateTime
+  player   Player   @relation(fields: [playerId], references: [id])
+  playerId String   @db.ObjectId
+}
+
+model Endurance {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  endurance String
+  date      DateTime
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String   @db.ObjectId
+}
+
+model Appointment {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  date         DateTime
+  player       Player    @relation(fields: [playerId], references: [id])
+  playerId     String    @db.ObjectId
+  forTreatment Treatment @relation(fields: [treatmentId], references: [id])
+  treatmentId  String    @db.ObjectId
+}
+
+model Injury {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  injuryName String
+  injuryDate DateTime
+  player     Player      @relation(fields: [playerId], references: [id])
+  playerId   String      @db.ObjectId
+  treatments Treatment[]
+}
+
+model Treatment {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  treatmentName String
+  treatmentDate DateTime
+  injury        Injury        @relation(fields: [injuryId], references: [id])
+  injuryId      String        @db.ObjectId
+  Appointment   Appointment[]
+}
