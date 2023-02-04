@@ -10,13 +10,13 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/add-injury", async (req, res) => {
-  const { playerId, injuryName } = req.body;
+  const { playerId, injuryName, injuryDate } = req.body;
   if (!playerId || !injuryName) {
     res.status(400).json({ message: "PlayerId and InjuryName are required" });
     return;
   }
   service
-    .addNewInjuryToPlayer(playerId, injuryName)
+    .addNewInjuryToPlayer(playerId, injuryName, injuryDate)
     .then((data) => {
       res.json(data);
     })

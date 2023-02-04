@@ -2,12 +2,14 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { ChakraProvider } from "@chakra-ui/react";
+import { NewInjuryButton } from "./components/NewInjury/NewInjuryButton";
+import theme from "./assets/theme";
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <div className="App">
-        <h1>Hello</h1>
+        <NewInjuryButton />
       </div>
     </ChakraProvider>
   );

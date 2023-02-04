@@ -69,7 +69,7 @@ model Treatment {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   treatmentName String
   treatmentDate DateTime
-  injury        Injury        @relation(fields: [injuryId], references: [id])
-  injuryId      String        @db.ObjectId
+  injury        Injury?       @relation(fields: [injuryId], references: [id])
+  injuryId      String?       @db.ObjectId
   Appointment   Appointment[]
 }

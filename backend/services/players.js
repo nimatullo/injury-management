@@ -32,10 +32,10 @@ class PlayerService {
     });
   }
 
-  async addNewInjuryToPlayer(playerId, injuryName) {
+  async addNewInjuryToPlayer(playerId, injuryName, injuryDate) {
     return new Promise((resolve, reject) => {
       this.mongoService
-        .addInjuryToPlayer(playerId, injuryName)
+        .addInjuryToPlayer(playerId, injuryName, injuryDate)
         .then((data) => {
           resolve(data);
         })

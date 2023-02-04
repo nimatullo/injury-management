@@ -27,6 +27,10 @@ class MongoService {
       this.db.injury
         .findMany({
           distinct: ["injuryName"],
+
+          include: {
+            treatments: true,
+          },
         })
         .then((data) => {
           resolve(data);
@@ -52,8 +56,12 @@ class MongoService {
     });
   }
 
-  async addInjuryToPlayer(playerId, injuryName) {
-    const injury = await this._tryFindInjury(injuryName);
+  async addInjuryToPlayer(playerId, injuryName, injuryDate) {
+    if (!injuryDate) {
+      injuryDate = new Date();
+    } else {
+      injuryDate = new Date(injuryDate);
+    }
 
     return new Promise((resolve, reject) => {
       this.db.player
@@ -63,8 +71,9 @@ class MongoService {
           },
           data: {
             injuries: {
-              connect: {
-                id: injury.id,
+              create: {
+                injuryName: injuryName,
+                injuryDate: injuryDate,
               },
             },
           },
@@ -76,53 +85,6 @@ class MongoService {
           reject(err);
         });
     });
-  }
-
-  async getInjuriesForPlayer(playerId) {
-    return new Promise((resolve, reject) => {
-      this.db.injury
-        .findMany({
-          where: {
-            playerId,
-          },
-        })
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
-  async _tryFindInjury(injuryName) {
-    const injury = await this.db.injury.findFirst({
-      where: {
-        injuryName: injuryName,
-      },
-    });
-
-    if (injury) {
-      return new Promise((resolve, reject) => {
-        resolve(injury);
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        this.db.injury
-          .create({
-            data: {
-              injuryName: injuryName,
-              injuryDate: new Date(),
-            },
-          })
-          .then((data) => {
-            resolve(data);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-    }
   }
 }
 

@@ -18,6 +18,19 @@ class InjuryService {
         });
     });
   }
+
+  async addTreatmentToInjury(injuryId, treatment) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .addTreatmentToInjury(injuryId, treatment)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = InjuryService;
