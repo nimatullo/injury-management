@@ -15,7 +15,8 @@ model Player {
   name                 String
   position             String
   number               Int
-  injuries             Injury[]
+  injuries             Injury[]        @relation(fields: [injuryIds], references: [id])
+  injuryIds            String[]        @db.ObjectId
   upcomingAppointments Appointment[]
   PainLevel            PainLevel[]
   RangeOfMotion        RangeOfMotion[]
@@ -59,8 +60,8 @@ model Injury {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
   injuryName String
   injuryDate DateTime
-  player     Player      @relation(fields: [playerId], references: [id])
-  playerId   String      @db.ObjectId
+  player     Player[]    @relation(fields: [playerId], references: [id])
+  playerId   String[]    @db.ObjectId
   treatments Treatment[]
 }
 

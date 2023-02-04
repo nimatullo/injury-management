@@ -9,4 +9,20 @@ router.get("/", async (req, res) => {
   res.json(players);
 });
 
+router.post("/add-injury", async (req, res) => {
+  const { playerId, injuryName } = req.body;
+  if (!playerId || !injuryName) {
+    res.status(400).json({ message: "PlayerId and InjuryName are required" });
+    return;
+  }
+  service
+    .addNewInjuryToPlayer(playerId, injuryName)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 module.exports = router;

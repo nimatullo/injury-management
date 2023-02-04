@@ -9,7 +9,7 @@ class PlayerService {
   async getPlayers() {
     return new Promise((resolve, reject) => {
       this.mongoService
-        .getAll(this.collection)
+        .getPlayers()
         .then((data) => {
           resolve(data);
         })
@@ -32,12 +32,10 @@ class PlayerService {
     });
   }
 
-  async addNewInjuryToPlayer(playerId, injury) {
-    const injury = await this.mongoService.tryFindInjury(injuryName);
-
+  async addNewInjuryToPlayer(playerId, injuryName) {
     return new Promise((resolve, reject) => {
       this.mongoService
-        .addInjuryToPlayer(playerId, injury)
+        .addInjuryToPlayer(playerId, injuryName)
         .then((data) => {
           resolve(data);
         })

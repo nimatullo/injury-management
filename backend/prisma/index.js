@@ -1,9 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ["query", "info", "warn"],
+});
 
 async function main() {
   await prisma.$connect();
+  // generateData();
 }
 
 async function generateData() {
@@ -17,7 +20,7 @@ async function generateData() {
           {
             injuryName: "Knee",
             injuryDate: new Date("2023-01-20"),
-            treatment: {
+            treatments: {
               create: [
                 {
                   treatmentName: "Rest",
@@ -46,11 +49,11 @@ async function generateData() {
       injuries: {
         create: [
           {
-            injuryName: "Knee",
+            injuryName: "Elbow Sprain",
             injuryDate: new Date("2023-02-03"),
-            treatment: {
+            treatments: {
               create: {
-                treatmentName: "Rest",
+                treatmentName: "Ice",
                 treatmentDate: new Date("2023-02-03"),
               },
             },
@@ -69,7 +72,7 @@ async function generateData() {
           {
             injuryName: "Shin",
             injuryDate: new Date("2023-02-03"),
-            treatment: {
+            treatments: {
               create: [
                 {
                   treatmentName: "Rest",

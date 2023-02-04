@@ -5,10 +5,29 @@ class MongoService {
     this.db = db;
   }
 
-  async getAll(collection) {
+  async getPlayers() {
     return new Promise((resolve, reject) => {
-      this.db[collection]
-        .findMany()
+      this.db.player
+        .findMany({
+          include: {
+            injuries: true,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getInjuries() {
+    return new Promise((resolve, reject) => {
+      this.db.injury
+        .findMany({
+          distinct: ["injuryName"],
+        })
         .then((data) => {
           resolve(data);
         })
@@ -33,7 +52,9 @@ class MongoService {
     });
   }
 
-  async addInjuryToPlayer(playerId, injury) {
+  async addInjuryToPlayer(playerId, injuryName) {
+    const injury = await this._tryFindInjury(injuryName);
+
     return new Promise((resolve, reject) => {
       this.db.player
         .update({
@@ -74,10 +95,10 @@ class MongoService {
     });
   }
 
-  async tryFindInjury(injuryName) {
-    const injury = await this.db.injury.findUnique({
+  async _tryFindInjury(injuryName) {
+    const injury = await this.db.injury.findFirst({
       where: {
-        name: injuryName,
+        injuryName: injuryName,
       },
     });
 
@@ -90,7 +111,8 @@ class MongoService {
         this.db.injury
           .create({
             data: {
-              name: injuryName,
+              injuryName: injuryName,
+              injuryDate: new Date(),
             },
           })
           .then((data) => {

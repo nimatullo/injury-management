@@ -9,7 +9,7 @@ class InjuryService {
   async getInjuries() {
     return new Promise((resolve, reject) => {
       this.mongoService
-        .getAll(this.collection)
+        .getInjuries()
         .then((data) => {
           resolve(data);
         })
