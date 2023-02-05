@@ -31,6 +31,19 @@ class InjuryService {
         });
     });
   }
+
+  async getInjuriesForPlayer(playerId) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getInjuriesForPlayer(playerId)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = InjuryService;

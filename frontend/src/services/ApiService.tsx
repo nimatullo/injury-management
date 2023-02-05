@@ -1,20 +1,6 @@
+import { ApiResponse, ApiOptions, ListItems } from "./types";
+
 const API_URL = "http://localhost:8000/";
-
-interface ApiResponse {
-  data: any;
-  status: number;
-}
-
-interface ApiOptions {
-  headers: any;
-  method: string;
-  body?: any;
-}
-
-export interface ListItems {
-  id: string;
-  name: string;
-}
 
 class ApiService {
   private static async fetchData(
@@ -85,6 +71,14 @@ class ApiService {
     return this.get("players/injured").then((response) => {
       if (response.status === 200) {
         return response.data;
+      }
+    });
+  }
+
+  public static async getInjuriesForPlayer(id: string): Promise<any> {
+    return this.get("injuries/" + id).then((response) => {
+      if (response.status === 200) {
+        return response.data.injuries;
       }
     });
   }

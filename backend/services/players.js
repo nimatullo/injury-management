@@ -19,6 +19,19 @@ class PlayerService {
     });
   }
 
+  async getPlayer(id) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .get(this.collection, id)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async addPlayer(player) {
     return new Promise((resolve, reject) => {
       this.mongoService

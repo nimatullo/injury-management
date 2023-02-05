@@ -56,6 +56,23 @@ class MongoService {
     });
   }
 
+  async get(collection, id) {
+    return new Promise((resolve, reject) => {
+      this.db[collection]
+        .findUnique({
+          where: {
+            id: id,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async addInjuryToPlayer(playerId, injuryName, injuryDate) {
     if (!injuryDate) {
       injuryDate = new Date();
@@ -99,6 +116,26 @@ class MongoService {
                 },
               },
             },
+          },
+          include: {
+            injuries: true,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getInjuriesForPlayer(playerId) {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .findUnique({
+          where: {
+            id: playerId,
           },
           include: {
             injuries: true,

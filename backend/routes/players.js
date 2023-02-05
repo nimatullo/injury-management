@@ -36,4 +36,20 @@ router.get("/injured", async (req, res) => {
     });
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(400).json({ message: "PlayerId is required" });
+    return;
+  }
+  service
+    .getPlayer(id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 module.exports = router;
