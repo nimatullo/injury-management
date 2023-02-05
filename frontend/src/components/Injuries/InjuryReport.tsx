@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
@@ -18,9 +19,9 @@ export const InjuryReport = () => {
   const params = useParams();
 
   return (
-    <>
+    <Box mt="5">
       <div>{player && <PlayerDetails player={player} />}</div>
       <InjuryGraphs />
-    </>
+    </Box>
   );
 };

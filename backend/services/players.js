@@ -70,6 +70,58 @@ class PlayerService {
         });
     });
   }
+
+  async getCategories() {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getCategories()
+        .then((data) => {
+          resolve(data.map((exercise) => exercise.category));
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async addMeasurement(playerId, measurement, date, exercise, category) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .addMeasurement(playerId, date, category, exercise, measurement)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getMeasurementsForPlayer(playerId, exercise) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getPlayerMeasurement(playerId, exercise)
+        .then((data) => {
+          resolve(data.exercises);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getExercisesForCategory(category) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getExercisesForCategory(category)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = PlayerService;

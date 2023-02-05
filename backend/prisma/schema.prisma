@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Player {
-  id                   String          @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String        @id @default(auto()) @map("_id") @db.ObjectId
   name                 String
   position             String
   number               Int
@@ -19,36 +19,20 @@ model Player {
   height               String
   weight               String
   playerPhoto          String
-  injuries             Injury[]        @relation(fields: [injuryIds], references: [id])
-  injuryIds            String[]        @db.ObjectId
+  injuries             Injury[]      @relation(fields: [injuryIds], references: [id])
+  injuryIds            String[]      @db.ObjectId
   upcomingAppointments Appointment[]
-  PainLevel            PainLevel[]
-  RangeOfMotion        RangeOfMotion[]
-  Endurance            Endurance[]
+  exercises            Exercise[]
 }
 
-model PainLevel {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  painLevel Int
-  date      DateTime
-  player    Player   @relation(fields: [playerId], references: [id])
-  playerId  String   @db.ObjectId
-}
-
-model RangeOfMotion {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  range    Float
-  date     DateTime
-  player   Player   @relation(fields: [playerId], references: [id])
-  playerId String   @db.ObjectId
-}
-
-model Endurance {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  endurance String
-  date      DateTime
-  player    Player   @relation(fields: [playerId], references: [id])
-  playerId  String   @db.ObjectId
+model Exercise {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  measurement String
+  category    String
+  date        DateTime
+  player      Player   @relation(fields: [playerId], references: [id])
+  playerId    String   @db.ObjectId
 }
 
 model Appointment {

@@ -149,6 +149,90 @@ class MongoService {
         });
     });
   }
+
+  async addMeasurement(playerId, date, category, exercise, measurement) {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .update({
+          where: {
+            id: playerId,
+          },
+          data: {
+            exercises: {
+              create: {
+                date: new Date(date),
+                category: category,
+                name: exercise,
+                measurement: measurement.toString(),
+              },
+            },
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getCategories() {
+    return new Promise((resolve, reject) => {
+      this.db.exercise
+        .findMany({
+          distinct: ["category"],
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getPlayerMeasurement(playerId, exercise) {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .findUnique({
+          where: {
+            id: playerId,
+          },
+          include: {
+            exercises: {
+              where: {
+                name: exercise,
+              },
+            },
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getExercisesForCategory(category) {
+    return new Promise((resolve, reject) => {
+      this.db.exercise
+        .findMany({
+          where: {
+            category: category,
+          },
+          distinct: ["name"],
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = MongoService;

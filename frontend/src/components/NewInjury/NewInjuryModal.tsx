@@ -13,7 +13,8 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 import AutoSuggestionField from "../Form/AutoSuggestionField";
-import ApiService, { ListItems } from "../../services/ApiService";
+import ApiService from "../../services/ApiService";
+import { ListItems } from "../../services/types";
 
 interface NewInjuryModalProps {
   isOpen: boolean;

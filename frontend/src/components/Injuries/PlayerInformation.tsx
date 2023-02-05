@@ -53,6 +53,7 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
           borderRadius="full"
           mr="5"
           backgroundColor={"gray.300"}
+          shadow="md"
         />
         <Box ml="5">
           <Heading size="lg" my="2">
