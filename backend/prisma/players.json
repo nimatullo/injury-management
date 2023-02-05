@@ -1,0 +1,173 @@
+[
+  {
+    "name": "Chris Chiozza",
+    "playerId": "1629185",
+    "number": "2",
+    "position": "G",
+    "height": "5'11",
+    "weight": "175",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1629185.png"
+  },
+  {
+    "name": "Nic Claxton",
+    "playerId": "1629651",
+    "number": "33",
+    "position": "C",
+    "height": "6'11",
+    "weight": "215",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1629651.png"
+  },
+  {
+    "name": "Seth Curry",
+    "playerId": "203552",
+    "number": "30",
+    "position": "G",
+    "height": "6'2",
+    "weight": "185",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/203552.png"
+  },
+  {
+    "name": "David Duke Jr.",
+    "playerId": "1630561",
+    "number": "6",
+    "position": "G",
+    "height": "6'4",
+    "weight": "204",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1630561.png"
+  },
+  {
+    "name": "Kevin Durant",
+    "playerId": "201142",
+    "number": "7",
+    "position": "F",
+    "height": "6'10",
+    "weight": "240",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/201142.png"
+  },
+  {
+    "name": "Kessler Edwards",
+    "playerId": "1630556",
+    "number": "14",
+    "position": "F",
+    "height": "6'7",
+    "weight": "203",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1630556.png"
+  },
+  {
+    "name": "RaiQuan Gray",
+    "playerId": "1630564",
+    "number": "0",
+    "position": "F",
+    "height": "-'-",
+    "weight": "",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1630564.png"
+  },
+  {
+    "name": "Joe Harris",
+    "playerId": "203925",
+    "number": "12",
+    "position": "G-F",
+    "height": "6'6",
+    "weight": "220",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/203925.png"
+  },
+  {
+    "name": "Kyrie Irving",
+    "playerId": "202681",
+    "number": "11",
+    "position": "G",
+    "height": "6'2",
+    "weight": "195",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/202681.png"
+  },
+  {
+    "name": "Patty Mills",
+    "playerId": "201988",
+    "number": "8",
+    "position": "G",
+    "height": "6'0",
+    "weight": "180",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/201988.png"
+  },
+  {
+    "name": "Markieff Morris",
+    "playerId": "202693",
+    "number": "13",
+    "position": "F",
+    "height": "6'9",
+    "weight": "245",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/202693.png"
+  },
+  {
+    "name": "Royce O'Neale",
+    "playerId": "1626220",
+    "number": "00",
+    "position": "F",
+    "height": "6'5",
+    "weight": "226",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1626220.png"
+  },
+  {
+    "name": "Day'Ron Sharpe",
+    "playerId": "1630549",
+    "number": "20",
+    "position": "C",
+    "height": "6'9",
+    "weight": "265",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1630549.png"
+  },
+  {
+    "name": "Ben Simmons",
+    "playerId": "1627732",
+    "number": "10",
+    "position": "G-F",
+    "height": "6'11",
+    "weight": "240",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1627732.png"
+  },
+  {
+    "name": "Edmond Sumner",
+    "playerId": "1628410",
+    "number": "4",
+    "position": "G",
+    "height": "-'-",
+    "weight": "",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1628410.png"
+  },
+  {
+    "name": "Cam Thomas",
+    "playerId": "1630560",
+    "number": "24",
+    "position": "G",
+    "height": "6'3",
+    "weight": "210",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1630560.png"
+  },
+  {
+    "name": "T.J. Warren",
+    "playerId": "203933",
+    "number": "1",
+    "position": "F",
+    "height": "6'8",
+    "weight": "220",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/203933.png"
+  },
+  {
+    "name": "Yuta Watanabe",
+    "playerId": "1629139",
+    "number": "18",
+    "position": "G-F",
+    "height": "6'9",
+    "weight": "215",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1629139.png"
+  },
+  {
+    "name": "Alondes Williams",
+    "playerId": "1631214",
+    "number": "31",
+    "position": "G",
+    "height": "-'-",
+    "weight": "",
+    "playerPhoto": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1631214.png"
+  }
+]

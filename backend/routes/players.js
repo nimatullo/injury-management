@@ -25,4 +25,15 @@ router.post("/add-injury", async (req, res) => {
     });
 });
 
+router.get("/injured", async (req, res) => {
+  service
+    .getInjuredPlayers()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 module.exports = router;

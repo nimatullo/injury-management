@@ -82,7 +82,7 @@ class ApiService {
   }
 
   public static async getInjuredPlayers(): Promise<any> {
-    return this.get("players").then((response) => {
+    return this.get("players/injured").then((response) => {
       if (response.status === 200) {
         return response.data;
       }

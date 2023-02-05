@@ -41,7 +41,8 @@ const AutoSuggestionField: React.FC<AutocompleteProps> = ({
         .map((option: string) => (
           <ListItem
             _hover={{
-              backgroundColor: "gray.400",
+              backgroundColor: "black",
+              color: "white",
               cursor: "pointer",
               borderRadius: "5",
             }}
@@ -60,7 +61,8 @@ const AutoSuggestionField: React.FC<AutocompleteProps> = ({
         .map((option: ListItems) => (
           <ListItem
             _hover={{
-              backgroundColor: "gray.400",
+              backgroundColor: "black",
+              color: "white",
               cursor: "pointer",
               borderRadius: "5",
             }}
@@ -78,7 +80,13 @@ const AutoSuggestionField: React.FC<AutocompleteProps> = ({
     <Box>
       <Input value={inputValue} onChange={handleInputChange} />
       {showSuggestions && (
-        <List p="0.5" backgroundColor={"gray.300"} mt={"1"} borderRadius="5">
+        <List
+          p="0.5"
+          backgroundColor={"gray.100"}
+          mt={"1"}
+          borderRadius="5"
+          overflow={"hidden"}
+        >
           {getFilteredOptions()}
         </List>
       )}

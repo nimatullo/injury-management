@@ -15,6 +15,10 @@ model Player {
   name                 String
   position             String
   number               Int
+  realId               String
+  height               String
+  weight               String
+  playerPhoto          String
   injuries             Injury[]        @relation(fields: [injuryIds], references: [id])
   injuryIds            String[]        @db.ObjectId
   upcomingAppointments Appointment[]

@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { readFile } = require("fs").promises;
 
 const prisma = new PrismaClient({
   log: ["query", "info", "warn"],
@@ -7,6 +8,25 @@ const prisma = new PrismaClient({
 async function main() {
   await prisma.$connect();
   // generateData();
+  // addPlayersToDB();
+}
+
+async function addPlayersToDB() {
+  const playerJson = JSON.parse(await readFile("players.json", "utf-8"));
+
+  playerJson.forEach(async (player) => {
+    await prisma.player.create({
+      data: {
+        name: player.name,
+        number: Number(player.number),
+        position: player.position,
+        realId: player.playerId,
+        height: player.height,
+        weight: player.weight,
+        playerPhoto: player.playerPhoto,
+      },
+    });
+  });
 }
 
 async function generateData() {

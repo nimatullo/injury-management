@@ -68,7 +68,7 @@ export const NewInjuryModal = ({ isOpen, onClose }: NewInjuryModalProps) => {
         <ModalHeader>Report New Injury</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl>
+          <FormControl my="2">
             <FormLabel>Player name</FormLabel>
             <AutoSuggestionField
               options={players}
@@ -76,7 +76,7 @@ export const NewInjuryModal = ({ isOpen, onClose }: NewInjuryModalProps) => {
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl my="2">
             <FormLabel>Injury</FormLabel>
             <AutoSuggestionField
               options={injuries}
@@ -84,7 +84,7 @@ export const NewInjuryModal = ({ isOpen, onClose }: NewInjuryModalProps) => {
             />
           </FormControl>
 
-          <FormControl>
+          <FormControl my="2">
             <FormLabel>Injury date</FormLabel>
             <Input
               placeholder="Select injury date"

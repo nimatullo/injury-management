@@ -44,6 +44,19 @@ class PlayerService {
         });
     });
   }
+
+  async getInjuredPlayers() {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getInjuredPlayers()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = PlayerService;

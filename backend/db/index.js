@@ -86,6 +86,32 @@ class MongoService {
         });
     });
   }
+
+  async getInjuredPlayers() {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .findMany({
+          where: {
+            injuries: {
+              some: {
+                injuryName: {
+                  not: undefined,
+                },
+              },
+            },
+          },
+          include: {
+            injuries: true,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = MongoService;

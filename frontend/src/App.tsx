@@ -1,17 +1,20 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { NewInjuryButton } from "./components/NewInjury/NewInjuryButton";
 import theme from "./assets/theme";
-import { TeamInjurySummary } from "./components/Injuries/TeamInjurySummary";
+import "./assets/index.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Dashboard } from "./pages/Dashboard";
+import { InjuryReport } from "./components/Injuries/InjuryReport";
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
-      <div className="App">
-        <NewInjuryButton />
-
-        <TeamInjurySummary />
-      </div>
-    </ChakraProvider>
+    <BrowserRouter>
+      <ChakraProvider theme={theme}>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/injury-report/:id" element={<InjuryReport />} />
+        </Routes>
+      </ChakraProvider>
+    </BrowserRouter>
   );
 }
 
