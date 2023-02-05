@@ -6,8 +6,8 @@ export const NewInjuryButton = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button colorScheme="black" onClick={onOpen}>
-        New Injury
+      <Button colorScheme="black" onClick={onOpen} borderColor="transparent">
+        Create Injury Report
       </Button>
 
       <NewInjuryModal isOpen={isOpen} onClose={onClose} />

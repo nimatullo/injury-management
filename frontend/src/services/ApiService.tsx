@@ -80,6 +80,14 @@ class ApiService {
   ): Promise<ApiResponse> {
     return this.post("players/add-injury", injuryReport);
   }
+
+  public static async getInjuredPlayers(): Promise<any> {
+    return this.get("players").then((response) => {
+      if (response.status === 200) {
+        return response.data;
+      }
+    });
+  }
 }
 
 export default ApiService;
