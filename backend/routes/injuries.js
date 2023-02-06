@@ -65,4 +65,21 @@ router.post("/add-treatment", async (req, res) => {
     });
 });
 
+router.get("/:name/treatments", async (req, res) => {
+  const { name } = req.params;
+  if (!name) {
+    res.status(400).json({ message: "InjuryId is required" });
+    return;
+  }
+
+  service
+    .getTreatmentsForInjury(name)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 module.exports = router;

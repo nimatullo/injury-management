@@ -5,11 +5,13 @@ import { ListItems } from "../../services/ApiService";
 interface AutocompleteProps {
   options: ListItems[] | string[];
   onSelect: (value: string) => void;
+  placeholder?: string;
 }
 
 const AutoSuggestionField: React.FC<AutocompleteProps> = ({
   options,
   onSelect,
+  placeholder,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -78,7 +80,11 @@ const AutoSuggestionField: React.FC<AutocompleteProps> = ({
 
   return (
     <Box>
-      <Input value={inputValue} onChange={handleInputChange} />
+      <Input
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder={placeholder}
+      />
       {showSuggestions && (
         <List
           p="0.5"

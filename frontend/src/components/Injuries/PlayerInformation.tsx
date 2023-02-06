@@ -19,6 +19,7 @@ import React from "react";
 import ApiService from "../../services/ApiService";
 import { PlayerInformation } from "../../services/types";
 import { BsCheckCircleFill, BsFillCalendarPlusFill } from "react-icons/bs";
+import { NewAppointmentButton } from "./NewAppointmentModal";
 
 interface PlayerInformationProps {
   player: PlayerInformation;
@@ -26,10 +27,17 @@ interface PlayerInformationProps {
 
 export const PlayerDetails = ({ player }: PlayerInformationProps) => {
   const [currentInjuries, setCurrentInjuries] = React.useState<any>([]);
+  const [upcomingAppointments, setUpcomingAppointments] = React.useState<any>(
+    []
+  );
 
   React.useEffect(() => {
     ApiService.getInjuriesForPlayer(player.id).then((data: any) => {
       setCurrentInjuries(data);
+    });
+
+    ApiService.get(`players/${player.id}/appointments`).then((res: any) => {
+      setUpcomingAppointments(res.data);
     });
   }, []);
 
@@ -94,22 +102,29 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
           <Heading size="md" my="2">
             Next Appointments
           </Heading>
-          <Flex justifyContent="space-between" alignItems="center">
-            <Heading size="sm">Fluid Removal</Heading>
-            <Text color="gray.700">10/22/2023</Text>
-            <HStack>
-              <Icon as={BsCheckCircleFill} color="green.500" />
-              <Text>10:00 AM</Text>
-            </HStack>
+          <Flex flexDir="column">
+            {upcomingAppointments.length > 0 ? (
+              upcomingAppointments.map((appointment: any) => {
+                return (
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <Heading size="sm">
+                      {appointment.forTreatment.treatmentName}
+                    </Heading>
+                    <Text color="gray.700">
+                      {new Date(appointment.date).toLocaleDateString()}
+                    </Text>
+                    <HStack>
+                      <Icon as={BsCheckCircleFill} color="green.500" />
+                      <Text>{appointment.time}</Text>
+                    </HStack>
+                  </Flex>
+                );
+              })
+            ) : (
+              <Text>No upcoming appointments</Text>
+            )}
           </Flex>
-          <Button
-            mt="2"
-            size="sm"
-            leftIcon={<BsFillCalendarPlusFill />}
-            colorScheme="black"
-          >
-            Schedule
-          </Button>
+          <NewAppointmentButton player={player} injuries={currentInjuries} />
         </Box>
       </Grid>
     </Center>

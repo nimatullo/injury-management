@@ -117,4 +117,39 @@ router.get("/measurements/:category", async (req, res) => {
     });
 });
 
+router.post("/:id/appointments", async (req, res) => {
+  const { id } = req.params;
+  const { date, time, injuryName, treatment } = req.body;
+  if (!id || !date || !time || !injuryName || !treatment) {
+    res.status(400).json({
+      message: "PlayerId, Date, Time, InjuryName and Treatment are required",
+    });
+    return;
+  }
+  service
+    .createAppointment(id, date, time, treatment, injuryName)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
+router.get("/:id/appointments", async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(400).json({ message: "PlayerId is required" });
+    return;
+  }
+  service
+    .getAppointmentsForPlayer(id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 module.exports = router;

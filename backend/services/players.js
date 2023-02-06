@@ -122,6 +122,32 @@ class PlayerService {
         });
     });
   }
+
+  async createAppointment(playerId, date, time, treatment, forInjury) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .createAppointment(playerId, date, time, treatment, forInjury)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getAppointmentsForPlayer(playerId) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getUpcomingAppointments(playerId)
+        .then((data) => {
+          resolve(data?.upcomingAppointments);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = PlayerService;

@@ -41,6 +41,8 @@ model Appointment {
   player       Player    @relation(fields: [playerId], references: [id])
   playerId     String    @db.ObjectId
   forTreatment Treatment @relation(fields: [treatmentId], references: [id])
+  time         String
+  notes        String?
   treatmentId  String    @db.ObjectId
 }
 
@@ -56,8 +58,7 @@ model Injury {
 model Treatment {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   treatmentName String
-  treatmentDate DateTime
-  injury        Injury?       @relation(fields: [injuryId], references: [id])
-  injuryId      String?       @db.ObjectId
   Appointment   Appointment[]
+  Injury        Injury?       @relation(fields: [injuryId], references: [id])
+  injuryId      String?       @db.ObjectId
 }

@@ -233,6 +233,163 @@ class MongoService {
         });
     });
   }
+
+  /**
+   *
+   * @param {string} playerId
+   * @param {string} date
+   * @param {string} time
+   * @param {string} treatment
+   * @param {string} forInjury
+   *
+   * Creates an appointment for a player with a treatment for an injury
+   * if the injury does not have a treatment with the same treatmentName,
+   * it will create a new treatment for the injury
+   */
+  async createAppointment(playerId, date, time, treatmentName, forInjury) {
+    const treatment = await this.db.treatment.findFirst({
+      where: {
+        treatmentName: treatmentName,
+        injury: {
+          injuryName: forInjury,
+        },
+      },
+    });
+
+    if (treatment) {
+      return new Promise((resolve, reject) => {
+        this.db.player
+          .update({
+            where: {
+              id: playerId,
+            },
+            data: {
+              upcomingAppointments: {
+                create: {
+                  date: new Date(date),
+                  time: time,
+                  forTreatment: {
+                    connect: {
+                      id: treatment.id,
+                    },
+                  },
+                },
+              },
+            },
+          })
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    } else {
+      const injury = await this.db.injury.findFirst({
+        where: {
+          injuryName: forInjury,
+        },
+      });
+      return new Promise((resolve, reject) => {
+        this.db.player
+          .update({
+            where: {
+              id: playerId,
+            },
+            data: {
+              upcomingAppointments: {
+                create: {
+                  date: new Date(date),
+                  time: time,
+                  forTreatment: {
+                    create: {
+                      treatmentName: treatmentName,
+                      injury: {
+                        connect: {
+                          id: injury.id,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          })
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    }
+  }
+
+  async getUpcomingAppointments(playerId) {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .findUnique({
+          where: {
+            id: playerId,
+          },
+          include: {
+            upcomingAppointments: {
+              include: {
+                forTreatment: true,
+              },
+            },
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getTreatmentsForInjury(injuryName) {
+    return new Promise((resolve, reject) => {
+      this.db.injury
+        .findFirst({
+          where: {
+            injuryName: injuryName,
+          },
+          include: {
+            treatments: true,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async addTreatmentToInjury(injuryName, treatmentName) {
+    return new Promise((resolve, reject) => {
+      this.db.treatment
+        .create({
+          data: {
+            treatmentName: treatmentName,
+            injury: {
+              connect: {
+                injuryName: injuryName,
+              },
+            },
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = MongoService;
