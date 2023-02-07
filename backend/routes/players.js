@@ -136,6 +136,41 @@ router.post("/:id/appointments", async (req, res) => {
     });
 });
 
+router.put("/appointments/:appointmentId", async (req, res) => {
+  const { appointmentId } = req.params;
+  const { date, time, notes } = req.body;
+  if (!appointmentId || !date || !time) {
+    res.status(400).json({
+      message: "PlayerId, AppointmentId, Date and Time are required",
+    });
+    return;
+  }
+  service
+    .updateAppointment(appointmentId, date, time, notes)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
+router.get("/:id/appointments/all", async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(400).json({ message: "PlayerId is required" });
+    return;
+  }
+  service
+    .getAllAppointments(id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 router.get("/:id/appointments", async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -143,7 +178,7 @@ router.get("/:id/appointments", async (req, res) => {
     return;
   }
   service
-    .getAppointmentsForPlayer(id)
+    .getFirstThreeAppointments(id)
     .then((data) => {
       res.json(data);
     })

@@ -1,9 +1,6 @@
 import {
   Badge,
   Box,
-  Card,
-  CardBody,
-  CardHeader,
   Center,
   Flex,
   Grid,
@@ -12,53 +9,27 @@ import {
   Image,
   Text,
   VStack,
-  Icon,
-  Button,
   GridItem,
 } from "@chakra-ui/react";
 import React from "react";
 import ApiService from "../../services/ApiService";
-import { ApiResponse, PlayerInformation } from "../../services/types";
-import { BsCheckCircleFill, BsFillCalendarPlusFill } from "react-icons/bs";
-import { NewAppointmentButton } from "./NewAppointmentModal";
-import { useNavigate } from "react-router-dom";
+import { PlayerInformation } from "../../services/types";
+import { AppointmentsSummary } from "../Appointments/AppointmentsSummary";
 
-interface PlayerInformationProps {
+export interface PlayerInformationProps {
   player: PlayerInformation;
 }
 
+const recoveredInjuries = ["Ankle", "Back", "Calf"];
+
 export const PlayerDetails = ({ player }: PlayerInformationProps) => {
   const [currentInjuries, setCurrentInjuries] = React.useState<any>([]);
-  const [upcomingAppointments, setUpcomingAppointments] = React.useState<any>(
-    []
-  );
-
-  const navigate = useNavigate();
 
   React.useEffect(() => {
     ApiService.getInjuriesForPlayer(player.id).then((data: any) => {
       setCurrentInjuries(data);
     });
-
-    fetchAppointments();
   }, []);
-
-  const fetchAppointments = async () => {
-    ApiService.get(`players/${player.id}/appointments`).then(
-      (res: ApiResponse) => {
-        if (res.status === 200) {
-          setUpcomingAppointments(res.data);
-        }
-      }
-    );
-  };
-
-  const convert24to12 = (time: string) => {
-    const [hours, minutes] = time.split(":");
-    const hours12 = parseInt(hours) % 12 || 12;
-    const ampm = parseInt(hours) < 12 || parseInt(hours) === 24 ? "AM" : "PM";
-    return `${hours12}:${minutes} ${ampm}`;
-  };
 
   const daysAgo = (date: string) => {
     const today = new Date();
@@ -72,14 +43,7 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
     <Center p="5" borderBottomWidth={"1px"} borderBottomColor="gray.200">
       <Grid gridTemplateColumns="1fr 1fr 1fr">
         {/* Player Information */}
-        <Flex
-          ml="5"
-          // backgroundColor="#1d1d1d"
-          // color="white"
-          // borderRadius="md"
-          // p="1em"
-          // boxShadow="md"
-        >
+        <Flex ml="5">
           <Image
             src={player.playerPhoto}
             alt={player.name}
@@ -112,14 +76,24 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
                 </Heading>
                 {currentInjuries.map((injury: any) => {
                   return (
-                    <HStack>
-                      <Text key={injury.id}>{injury.injuryName}</Text>
+                    <HStack key={injury.id}>
+                      <Text>{injury.injuryName}</Text>
                       <Badge colorScheme="red" mr="2">
                         {daysAgo(injury.injuryDate)} days ago
                       </Badge>
                     </HStack>
                   );
                 })}
+                <Text>
+                  {
+                    recoveredInjuries[
+                      Math.floor(Math.random() * recoveredInjuries.length)
+                    ]
+                  }
+                  <Badge colorScheme="green" ml="2">
+                    Recovered
+                  </Badge>
+                </Text>
               </Box>
             )}
           </VStack>
@@ -134,44 +108,7 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
           p="1em"
           boxShadow="md"
         >
-          <Heading
-            size="md"
-            my="2"
-            onClick={() => navigate(`/${player.id}/appointments`)}
-            _hover={{
-              cursor: "pointer",
-              textDecoration: "underline",
-            }}
-          >
-            Next Appointments
-          </Heading>
-          <Flex flexDir="column">
-            {upcomingAppointments.length > 0 ? (
-              upcomingAppointments.map((appointment: any) => {
-                return (
-                  <Flex justifyContent="space-between" alignItems="center">
-                    <Heading size="sm">
-                      {appointment.forTreatment.treatmentName}
-                    </Heading>
-                    <Text>
-                      {new Date(appointment.date).toLocaleDateString()}
-                    </Text>
-                    <HStack>
-                      <Text>{convert24to12(appointment.time)}</Text>
-                      <Icon as={BsCheckCircleFill} color="green.500" />
-                    </HStack>
-                  </Flex>
-                );
-              })
-            ) : (
-              <Text>No upcoming appointments</Text>
-            )}
-          </Flex>
-          <NewAppointmentButton
-            player={player}
-            injuries={currentInjuries}
-            cb={fetchAppointments}
-          />
+          <AppointmentsSummary player={player} injuries={currentInjuries} />
         </GridItem>
       </Grid>
     </Center>

@@ -1,4 +1,4 @@
-export const theme = {
+const timelineTheme = {
   primary: {
     600: "#1a1a1a",
     900: "#edf2f7",
@@ -39,3 +39,5 @@ export const theme = {
     },
   },
 };
+
+export default timelineTheme;

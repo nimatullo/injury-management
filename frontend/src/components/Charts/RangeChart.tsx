@@ -1,12 +1,12 @@
-import { Box, Flex, Grid, Input } from "@chakra-ui/react";
+import { Box, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { Channel, Epg, Layout, Program, useEpg } from "planby";
 import React from "react";
-import { fetchEpg } from "./Timeline/helpers/common";
-import { theme } from "./Timeline/helpers/theme";
+import ApiService from "../../services/ApiService";
+import timelineTheme from "../../assets/timelineTheme";
 
-export const RangeChart2 = ({ playerId }: any) => {
+export const RangeChart = ({ playerId }: any) => {
   const [channels, setChannels] = React.useState<Channel[]>([]);
-  const [epg, setEpg] = React.useState<Program[]>([]);
+  const [Appointments, setAppointments] = React.useState<Program[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const [selectedDate, setSelectedDate] = React.useState<string>(
@@ -14,26 +14,25 @@ export const RangeChart2 = ({ playerId }: any) => {
   );
 
   const channelsData = React.useMemo(() => channels, [channels]);
-  const epgData = React.useMemo(() => epg, [epg]);
+  const appointmentsData = React.useMemo(() => Appointments, [Appointments]);
 
   const handleFetchResources = React.useCallback(async () => {
     setIsLoading(true);
-    const epg = await fetchEpg(playerId);
+    const appointments = await ApiService.getAppointmentsForTimeline(playerId);
     const channels = [
       {
         uuid: "1",
       },
     ];
 
-    console.log(epg, channels);
-    setEpg(epg as Program[]);
+    setAppointments(appointments as Program[]);
     setChannels(channels as Channel[]);
     setIsLoading(false);
   }, []);
 
   const { getEpgProps, getLayoutProps } = useEpg({
     channels: channelsData,
-    epg: epgData,
+    epg: appointmentsData,
     dayWidth: 7200,
     itemHeight: 100,
     isSidebar: false,
@@ -43,7 +42,7 @@ export const RangeChart2 = ({ playerId }: any) => {
     endDate:
       new Date(selectedDate).toISOString().substring(0, 10) + "T23:00:00",
     isBaseTimeFormat: true,
-    theme: theme,
+    theme: timelineTheme,
   });
 
   React.useEffect(() => {
@@ -52,14 +51,17 @@ export const RangeChart2 = ({ playerId }: any) => {
 
   return (
     <>
-      <Flex flexDir="row-reverse" p="1em">
+      <Flex flexDir="row" justifyContent="right" p="1em" alignItems="center">
         {selectedDate && (
-          <Input
-            maxW="300px"
-            type="date"
-            value={new Date().toISOString().substring(0, 10)}
-            onChange={(e) => setSelectedDate(e.target.value)}
-          />
+          <Flex flexDir="column" px="1em">
+            <FormLabel>Appointment Date</FormLabel>
+            <Input
+              maxW="300px"
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+          </Flex>
         )}
       </Flex>
       <Box h="500px" p="1em">

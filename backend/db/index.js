@@ -349,6 +349,34 @@ class MongoService {
     });
   }
 
+  async getFirstThreeUpcomingAppointments(playerId) {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .findUnique({
+          where: {
+            id: playerId,
+          },
+          include: {
+            upcomingAppointments: {
+              include: {
+                forTreatment: true,
+              },
+              take: 3,
+              orderBy: {
+                date: "asc",
+              },
+            },
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async getTreatmentsForInjury(injuryName) {
     return new Promise((resolve, reject) => {
       this.db.injury
@@ -380,6 +408,28 @@ class MongoService {
                 injuryName: injuryName,
               },
             },
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async updateAppointment(appointmentId, date, time, notes) {
+    return new Promise((resolve, reject) => {
+      this.db.appointment
+        .update({
+          where: {
+            id: appointmentId,
+          },
+          data: {
+            date: new Date(date),
+            time: time,
+            notes: notes,
           },
         })
         .then((data) => {

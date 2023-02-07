@@ -136,12 +136,43 @@ class PlayerService {
     });
   }
 
-  async getAppointmentsForPlayer(playerId) {
+  async getAllAppointments(playerId) {
     return new Promise((resolve, reject) => {
       this.mongoService
         .getUpcomingAppointments(playerId)
         .then((data) => {
           resolve(data?.upcomingAppointments);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getFirstThreeAppointments(playerId) {
+    const totalAppointments = await this.getAllAppointments(playerId);
+
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getFirstThreeUpcomingAppointments(playerId)
+        .then((data) => {
+          resolve({
+            appointments: data?.upcomingAppointments,
+            total: totalAppointments.length,
+          });
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async updateAppointment(appointmentId, date, time, notes) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .updateAppointment(appointmentId, date, time, notes)
+        .then((data) => {
+          resolve(data);
         })
         .catch((err) => {
           reject(err);

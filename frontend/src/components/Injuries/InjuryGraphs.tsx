@@ -1,19 +1,5 @@
-import {
-  Box,
-  Button,
-  Flex,
-  FormLabel,
-  HStack,
-  IconButton,
-  Select,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from "@chakra-ui/react";
-import { LineChart } from "./Charts/LineChart";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { Box, Flex, FormLabel, Select } from "@chakra-ui/react";
+import { LineChart } from "../Charts/LineChart";
 import React from "react";
 import ApiService from "../../services/ApiService";
 import { useParams } from "react-router-dom";
@@ -35,7 +21,6 @@ export const InjuryGraphs = () => {
 
   const params = useParams();
 
-  // Fetch data for graph for selected excersise
   React.useEffect(() => {
     fetchGraphData();
   }, [selectedExcersise]);
@@ -43,7 +28,6 @@ export const InjuryGraphs = () => {
   const fetchGraphData = async () => {
     const endpoint = `players/${params.id}/measurements/${selectedExcersise}`;
     ApiService.get(endpoint).then((res: any) => {
-      console.log(res.data);
       setGraphData(res.data);
     });
   };
@@ -69,8 +53,10 @@ export const InjuryGraphs = () => {
         <Box>
           <FormLabel>Excersise</FormLabel>
           <Select onChange={(e) => setSelectedExcersise(e.target.value)}>
-            {categoryToExcersise[selectedCategory].map((excersise: string) => (
-              <option value={excersise}>{excersise}</option>
+            {categoryToExcersise[selectedCategory].map((exercise: string) => (
+              <option key={exercise} value={exercise}>
+                {exercise}
+              </option>
             ))}
           </Select>
         </Box>
