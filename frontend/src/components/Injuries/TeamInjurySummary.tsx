@@ -59,7 +59,7 @@ export const TeamInjurySummary = (props: any) => {
                         cursor: "pointer",
                       }}
                       onClick={() => {
-                        navigate("/injury-report/" + player.id);
+                        navigate(player.id + "/injury-report");
                       }}
                     >
                       <Td>

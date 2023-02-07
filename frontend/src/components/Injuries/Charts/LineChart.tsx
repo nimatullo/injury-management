@@ -31,6 +31,7 @@ export const LineChart = ({ graphData }) => {
   const primaryAxis = React.useMemo(
     (): AxisOptions<RangeOfMotionData> => ({
       getValue: (datum) => new Date(datum.date),
+      tickCount: 8,
     }),
     []
   );
@@ -39,8 +40,6 @@ export const LineChart = ({ graphData }) => {
     (): AxisOptions<RangeOfMotionData>[] => [
       {
         getValue: (datum) => Number(datum.measurement),
-        min: 0,
-        max: 180,
         tickCount: 10,
       },
     ],

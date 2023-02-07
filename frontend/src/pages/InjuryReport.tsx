@@ -1,10 +1,10 @@
 import { Box } from "@chakra-ui/react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
-import ApiService from "../../services/ApiService";
-import { ApiResponse } from "../../services/types";
-import { InjuryGraphs } from "./InjuryGraphs";
-import { PlayerDetails } from "./PlayerInformation";
+import ApiService from "../services/ApiService";
+import { ApiResponse } from "../services/types";
+import { InjuryGraphs } from "../components/Injuries/InjuryGraphs";
+import { PlayerDetails } from "../components/Injuries/PlayerInformation";
 
 export const InjuryReport = () => {
   const [player, setPlayer] = React.useState<any>(null);

@@ -14,12 +14,14 @@ import {
   VStack,
   Icon,
   Button,
+  GridItem,
 } from "@chakra-ui/react";
 import React from "react";
 import ApiService from "../../services/ApiService";
-import { PlayerInformation } from "../../services/types";
+import { ApiResponse, PlayerInformation } from "../../services/types";
 import { BsCheckCircleFill, BsFillCalendarPlusFill } from "react-icons/bs";
 import { NewAppointmentButton } from "./NewAppointmentModal";
+import { useNavigate } from "react-router-dom";
 
 interface PlayerInformationProps {
   player: PlayerInformation;
@@ -31,15 +33,32 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
     []
   );
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     ApiService.getInjuriesForPlayer(player.id).then((data: any) => {
       setCurrentInjuries(data);
     });
 
-    ApiService.get(`players/${player.id}/appointments`).then((res: any) => {
-      setUpcomingAppointments(res.data);
-    });
+    fetchAppointments();
   }, []);
+
+  const fetchAppointments = async () => {
+    ApiService.get(`players/${player.id}/appointments`).then(
+      (res: ApiResponse) => {
+        if (res.status === 200) {
+          setUpcomingAppointments(res.data);
+        }
+      }
+    );
+  };
+
+  const convert24to12 = (time: string) => {
+    const [hours, minutes] = time.split(":");
+    const hours12 = parseInt(hours) % 12 || 12;
+    const ampm = parseInt(hours) < 12 || parseInt(hours) === 24 ? "AM" : "PM";
+    return `${hours12}:${minutes} ${ampm}`;
+  };
 
   const daysAgo = (date: string) => {
     const today = new Date();
@@ -51,31 +70,40 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
 
   return (
     <Center p="5" borderBottomWidth={"1px"} borderBottomColor="gray.200">
-      <Grid gridTemplateColumns="1fr 2fr 2fr 2fr">
+      <Grid gridTemplateColumns="1fr 1fr 1fr">
         {/* Player Information */}
-        <Image
-          src={player.playerPhoto}
-          alt={player.name}
-          boxSize="150px"
-          objectFit="cover"
-          borderRadius="full"
-          mr="5"
-          backgroundColor={"gray.300"}
-          shadow="md"
-        />
-        <Box ml="5">
-          <Heading size="lg" my="2">
-            {player.name}
-          </Heading>
-          <Heading size="md" my="2">
-            #{player.number} | {player.position}
-          </Heading>
-          <Text size="md">Weight: {player.weight} lbs</Text>
-          <Text size="md">Height: {player.height}</Text>
-        </Box>
+        <Flex
+          ml="5"
+          // backgroundColor="#1d1d1d"
+          // color="white"
+          // borderRadius="md"
+          // p="1em"
+          // boxShadow="md"
+        >
+          <Image
+            src={player.playerPhoto}
+            alt={player.name}
+            boxSize="150px"
+            objectFit="cover"
+            borderRadius="full"
+            mr="5"
+            backgroundColor="gray.100"
+            shadow="md"
+          />
+          <Flex flexDir="column">
+            <Heading size="lg" my="2">
+              {player.name}
+            </Heading>
+            <Heading size="md" my="2">
+              #{player.number} | {player.position}
+            </Heading>
+            <Text size="md">Weight: {player.weight} lbs</Text>
+            <Text size="md">Height: {player.height}</Text>
+          </Flex>
+        </Flex>
 
         {/* Current Injuries */}
-        <Box ml="5">
+        <GridItem ml="5">
           <VStack>
             {currentInjuries && (
               <Box>
@@ -95,11 +123,26 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
               </Box>
             )}
           </VStack>
-        </Box>
+        </GridItem>
 
         {/* Next Appointment */}
-        <Box ml="5">
-          <Heading size="md" my="2">
+        <GridItem
+          ml="5"
+          backgroundColor="#1d1d1d"
+          color="whiteAlpha.900"
+          borderRadius="md"
+          p="1em"
+          boxShadow="md"
+        >
+          <Heading
+            size="md"
+            my="2"
+            onClick={() => navigate(`/${player.id}/appointments`)}
+            _hover={{
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
             Next Appointments
           </Heading>
           <Flex flexDir="column">
@@ -110,12 +153,12 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
                     <Heading size="sm">
                       {appointment.forTreatment.treatmentName}
                     </Heading>
-                    <Text color="gray.700">
+                    <Text>
                       {new Date(appointment.date).toLocaleDateString()}
                     </Text>
                     <HStack>
+                      <Text>{convert24to12(appointment.time)}</Text>
                       <Icon as={BsCheckCircleFill} color="green.500" />
-                      <Text>{appointment.time}</Text>
                     </HStack>
                   </Flex>
                 );
@@ -124,8 +167,12 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
               <Text>No upcoming appointments</Text>
             )}
           </Flex>
-          <NewAppointmentButton player={player} injuries={currentInjuries} />
-        </Box>
+          <NewAppointmentButton
+            player={player}
+            injuries={currentInjuries}
+            cb={fetchAppointments}
+          />
+        </GridItem>
       </Grid>
     </Center>
   );

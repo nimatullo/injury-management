@@ -24,16 +24,19 @@ interface NewAppointmentModalProps {
   onClose: () => void;
   player: any;
   injuries: any;
+  cb: () => void;
 }
 
 interface NewAppointmentButtonProps {
   player: any;
   injuries: any;
+  cb: () => void;
 }
 
 export const NewAppointmentButton = ({
   player,
   injuries,
+  cb,
 }: NewAppointmentButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -43,7 +46,8 @@ export const NewAppointmentButton = ({
         mt="2"
         size="sm"
         leftIcon={<BsFillCalendarPlusFill />}
-        colorScheme="black"
+        backgroundColor="whiteAlpha.900"
+        color="black"
         onClick={onOpen}
       >
         Schedule
@@ -54,6 +58,7 @@ export const NewAppointmentButton = ({
         onClose={onClose}
         player={player}
         injuries={injuries}
+        cb={cb}
       />
     </>
   );
@@ -64,15 +69,39 @@ const NewAppointmentModal = ({
   onClose,
   player,
   injuries,
+  cb,
 }: NewAppointmentModalProps) => {
   const [treatments, setTreatments] = React.useState([]);
 
+  const [selectedInjury, setSelectedInjury] = React.useState("");
+  const [selectedTreatment, setSelectedTreatment] = React.useState("");
+  const [appointmentDate, setAppointmentDate] = React.useState("");
+  const [appointmentTime, setAppointmentTime] = React.useState("");
+
   const handleInjuryChange = (e: any) => {
     const injuryName = e.target.value;
+    setSelectedInjury(injuryName);
     const endpoint = `injuries/${injuryName}/treatments`;
 
     ApiService.get(endpoint).then((res) => {
       setTreatments(res.data.map((treatment: any) => treatment.treatmentName));
+    });
+  };
+
+  const handleSubmit = () => {
+    const endpoint = `players/${player.id}/appointments`;
+    const data = {
+      injuryName: selectedInjury,
+      treatment: selectedTreatment,
+      date: appointmentDate,
+      time: appointmentTime,
+    };
+
+    ApiService.post(endpoint, data).then((res) => {
+      if (res.status === 200) {
+        onClose();
+        cb();
+      }
     });
   };
 
@@ -98,29 +127,34 @@ const NewAppointmentModal = ({
 
           <FormControl my="2">
             <FormLabel>Appointment Date</FormLabel>
-            <Input placeholder="Enter appointment date" type="date" />
+            <Input
+              placeholder="Enter appointment date"
+              type="date"
+              value={appointmentDate}
+              onChange={(e) => setAppointmentDate(e.target.value)}
+            />
           </FormControl>
 
           <FormControl my="2">
             <FormLabel>Appointment Time</FormLabel>
-            <Input placeholder="Appointment time" type="time" />
+            <Input
+              placeholder="Appointment time"
+              type="time"
+              onChange={(e) => setAppointmentTime(e.target.value)}
+            />
           </FormControl>
 
           <FormControl my="2">
             <FormLabel>Treatment</FormLabel>
             <AutoSuggestionField
               placeholder="Select treatment"
-              onSelect={() => {}}
+              onSelect={(t) => setSelectedTreatment(t)}
               options={treatments}
             />
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <Button
-            colorScheme="black"
-            mr={3}
-            onClick={() => console.log("hello")}
-          >
+          <Button colorScheme="black" mr={3} onClick={handleSubmit}>
             Create Appointment
           </Button>
           <Button onClick={onClose}>Cancel</Button>
