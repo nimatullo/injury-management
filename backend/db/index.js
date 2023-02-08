@@ -419,6 +419,45 @@ class MongoService {
     });
   }
 
+  async getRandomPlayers() {
+    const allPlayers = await this.db.player.findMany({});
+
+    const randomPlayers = [];
+
+    for (let i = 0; i < 5; i++) {
+      const randomIndex = Math.floor(Math.random() * allPlayers.length);
+      randomPlayers.push(allPlayers[randomIndex]);
+      allPlayers.splice(randomIndex, 1);
+    }
+
+    return randomPlayers;
+  }
+
+  async getTodayAppointments() {
+    return new Promise((resolve, reject) => {
+      this.db.appointment
+        .findMany({
+          // where: {
+          //   date: new Date(),
+          // },
+          include: {
+            forTreatment: {
+              include: {
+                injury: true,
+              },
+            },
+            player: true,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async updateAppointment(appointmentId, date, time, notes) {
     return new Promise((resolve, reject) => {
       this.db.appointment

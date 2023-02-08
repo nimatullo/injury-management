@@ -110,6 +110,27 @@ class ApiService {
       }
     );
   }
+
+  public static async getUpcomingGame(): Promise<any> {
+    const endpoint =
+      "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2022/league/00_full_schedule.json";
+
+    const todayDate = new Date();
+    // Get the next Brooklyn Nets game
+    return fetch(endpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        const games = data.lscd[1].mscd.g;
+        const nextGame = games.find((game: any) => {
+          const gameDate = new Date(game.gdte);
+          return (
+            gameDate.getTime() >= todayDate.getTime() &&
+            (game.h.ta === "BKN" || game.v.ta === "BKN")
+          );
+        });
+        return nextGame;
+      });
+  }
 }
 
 export default ApiService;

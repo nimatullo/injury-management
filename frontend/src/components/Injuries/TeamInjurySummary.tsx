@@ -32,7 +32,12 @@ export const TeamInjurySummary = (props: any) => {
   }, []);
 
   return (
-    <Card borderWidth={"1px"} borderColor="gray.100">
+    <Card
+      borderWidth={"1px"}
+      borderColor="gray.100"
+      h="100%"
+      backgroundColor="#FAFAFC"
+    >
       <CardHeader>
         <Heading size="md">Latest Injuries</Heading>
       </CardHeader>
@@ -55,8 +60,9 @@ export const TeamInjurySummary = (props: any) => {
                     <Tr
                       key={player.id}
                       _hover={{
-                        background: "gray.50",
+                        background: "gray.100",
                         cursor: "pointer",
+                        borderRadius: "md",
                       }}
                       onClick={() => {
                         navigate(player.id + "/injury-report");

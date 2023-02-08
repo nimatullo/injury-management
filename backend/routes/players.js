@@ -25,6 +25,18 @@ router.post("/add-injury", async (req, res) => {
     });
 });
 
+router.get("/appointments/today", async (req, res) => {
+  service
+    .getTodayAppointments()
+    .then((data) => {
+      console.log("FOR SURE");
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 router.get("/injured", async (req, res) => {
   service
     .getInjuredPlayers()
@@ -59,6 +71,17 @@ router.post("/:id/measurements/:category", async (req, res) => {
 router.get("/categories", async (req, res) => {
   service
     .getCategories()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
+router.get("/random", async (req, res) => {
+  service
+    .getRandomPlayers()
     .then((data) => {
       res.json(data);
     })

@@ -179,6 +179,32 @@ class PlayerService {
         });
     });
   }
+
+  async getRandomPlayers() {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getRandomPlayers()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getTodayAppointments() {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getTodayAppointments()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = PlayerService;
