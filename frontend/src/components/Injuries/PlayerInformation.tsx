@@ -10,22 +10,27 @@ import {
   Text,
   VStack,
   GridItem,
+  Button,
+  Tooltip,
+  IconButton,
 } from "@chakra-ui/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import { PlayerInformation } from "../../services/types";
 import { AppointmentsSummary } from "../Appointments/AppointmentsSummary";
+import { ExercisesSummary } from "../Exercises/ExercisesSummary";
 
 export interface PlayerInformationProps {
   player: PlayerInformation;
-  isExtended?: boolean;
+  displayExercises?: boolean;
 }
 
 const recoveredInjuries = ["Ankle", "Back", "Calf"];
 
 export const PlayerDetails = ({
   player,
-  isExtended,
+  displayExercises,
 }: PlayerInformationProps) => {
   const [currentInjuries, setCurrentInjuries] = React.useState<any>([]);
 
@@ -42,6 +47,8 @@ export const PlayerDetails = ({
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
   };
+
+  const navigate = useNavigate();
 
   return (
     <Center p="5" borderBottomWidth={"1px"} borderBottomColor="gray.200">
@@ -104,19 +111,32 @@ export const PlayerDetails = ({
         </GridItem>
 
         {/* Next Appointment */}
-        <GridItem
-          ml="5"
-          backgroundColor="#1d1d1d"
-          color="whiteAlpha.900"
-          borderRadius="md"
-          p="1em"
-          boxShadow="md"
-        >
-          <AppointmentsSummary
-            isExtended={isExtended}
-            player={player}
-            injuries={currentInjuries}
-          />
+        <GridItem>
+          <Box
+            ml="5"
+            backgroundColor="#1d1d1d"
+            color="whiteAlpha.900"
+            borderRadius="md"
+            p="1em"
+            boxShadow="md"
+          >
+            {displayExercises ? (
+              <AppointmentsSummary player={player} injuries={currentInjuries} />
+            ) : (
+              <ExercisesSummary playerId={player.id} />
+            )}
+          </Box>
+          {!displayExercises && (
+            <Button
+              ml="5"
+              mt="2"
+              onClick={() => navigate(`/${player.id}/appointments`)}
+              variant="link"
+              colorScheme="black"
+            >
+              See Appointments
+            </Button>
+          )}
         </GridItem>
       </Grid>
     </Center>

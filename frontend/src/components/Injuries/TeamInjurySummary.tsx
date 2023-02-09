@@ -4,6 +4,7 @@ import {
   CardBody,
   CardHeader,
   Heading,
+  HStack,
   Image,
   Stack,
   Table,
@@ -19,6 +20,7 @@ import {
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
+import { NewInjuryButton } from "../NewInjury/NewInjuryButton";
 
 export const TeamInjurySummary = (props: any) => {
   const [injuredPlayers, setInjuredPlayers] = React.useState<any>([]);
@@ -39,7 +41,10 @@ export const TeamInjurySummary = (props: any) => {
       backgroundColor="#FAFAFC"
     >
       <CardHeader>
-        <Heading size="md">Latest Injuries</Heading>
+        <HStack justifyContent="space-between" alignItems="center" w="100%">
+          <Heading size="md">Injury Report</Heading>
+          <NewInjuryButton />
+        </HStack>
       </CardHeader>
 
       <CardBody>

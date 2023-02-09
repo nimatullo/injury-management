@@ -8,6 +8,7 @@ import {
   Tbody,
   Tr,
   Td,
+  Tooltip,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
@@ -65,7 +66,15 @@ export const AppointmentsList = ({ appointments, isExtended }: any) => {
                 <Td isNumeric py="1" border="0px" paddingStart="0">
                   <HStack justifyContent="flex-end">
                     <Text>{convert24to12(appointment.time)}</Text>
-                    <Icon as={BsCheckCircleFill} color="green.500" />
+                    <Tooltip
+                      label="Confirmed"
+                      aria-label="Confirmed"
+                      bg="green.500"
+                    >
+                      <span>
+                        <Icon as={BsCheckCircleFill} color="green.500" />
+                      </span>
+                    </Tooltip>
                   </HStack>
                 </Td>
               </Tr>
@@ -78,7 +87,7 @@ export const AppointmentsList = ({ appointments, isExtended }: any) => {
           );
         })}
       </Tbody>
-      {(appointments.total > 3 || !isExtended) && (
+      {appointments.total > 3 && !isExtended && (
         <Text>+ {appointments.total - 3} more</Text>
       )}
     </Table>

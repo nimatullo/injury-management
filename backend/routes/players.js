@@ -68,6 +68,22 @@ router.post("/:id/measurements/:category", async (req, res) => {
     });
 });
 
+router.get("/:id/exercises", async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(400).json({ message: "PlayerId is required" });
+    return;
+  }
+  service
+    .getThreeMostRecentExercises(id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
+    });
+});
+
 router.get("/categories", async (req, res) => {
   service
     .getCategories()

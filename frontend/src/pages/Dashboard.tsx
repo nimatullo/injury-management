@@ -14,8 +14,6 @@ import { TodayAppointments } from "../components/Dashboard/TodayAppointments";
 import { UpcomingGame } from "../components/Dashboard/UpcomingGame";
 
 import { TeamInjurySummary } from "../components/Injuries/TeamInjurySummary";
-import { NewInjuryButton } from "../components/NewInjury/NewInjuryButton";
-import ApiService from "../services/ApiService";
 
 export const Dashboard = () => {
   return (
@@ -29,9 +27,6 @@ export const Dashboard = () => {
       <GridItem rowSpan={1} colSpan={2}>
         <Text>
           Hello, <strong>Doctor</strong>
-        </Text>
-        <Text>
-          <NewInjuryButton />
         </Text>
       </GridItem>
       <GridItem rowSpan={2}>

@@ -1,0 +1,52 @@
+import { Heading, Table, Td, Text, Tr } from "@chakra-ui/react";
+import React from "react";
+import ApiService from "../../services/ApiService";
+
+interface ExercisesSummaryProps {
+  playerId: string;
+}
+
+export const ExercisesSummary = ({ playerId }: ExercisesSummaryProps) => {
+  const [exercises, setExercises] = React.useState<any>([]);
+
+  React.useEffect(() => {
+    const endpoint = `players/${playerId}/exercises`;
+    ApiService.get(endpoint).then((res) => {
+      if (res.status === 200) {
+        setExercises(res.data.exercises);
+      }
+    });
+  }, []);
+
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString("en-US", {
+      month: "numeric",
+      day: "numeric",
+    });
+  };
+
+  return exercises.length > 0 ? (
+    <>
+      <Heading size="md" my="2">
+        Latest Exercises
+      </Heading>
+      <Table variant="simple" size="sm" borderColor="transparent">
+        {exercises.map((exercise) => (
+          <Tr>
+            <Td border="0px" py="1" paddingStart="0">
+              <Heading size="sm">{exercise.name}</Heading>
+            </Td>
+            <Td border="0px" py="1" paddingStart="0" isNumeric>
+              {exercise.measurement}
+            </Td>
+            <Td border="0px" py="1" paddingStart="0" isNumeric>
+              <Text fontSize="sm">{formatDate(exercise.date)}</Text>
+            </Td>
+          </Tr>
+        ))}
+      </Table>
+    </>
+  ) : (
+    <Text>No exercises have been added for this player yet.</Text>
+  );
+};

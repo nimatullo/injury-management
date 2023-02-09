@@ -382,8 +382,6 @@ class MongoService {
   }
 
   async getAppointments(date) {
-    console.log(new Date(date).toISOString());
-
     return new Promise((resolve, reject) => {
       this.db.appointment
         .findMany({
@@ -523,6 +521,31 @@ class MongoService {
             date: new Date(date),
             time: time,
             notes: notes,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getThreeMostRecentExercises(playerId) {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .findUnique({
+          where: {
+            id: playerId,
+          },
+          include: {
+            exercises: {
+              take: 3,
+              orderBy: {
+                date: "desc",
+              },
+            },
           },
         })
         .then((data) => {

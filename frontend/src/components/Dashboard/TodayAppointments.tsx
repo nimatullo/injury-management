@@ -15,10 +15,15 @@ import {
   Icon,
   Flex,
   Button,
+  Tooltip,
+  CardFooter,
 } from "@chakra-ui/react";
 import React from "react";
-import { BsCheckCircleFill } from "react-icons/bs";
-import { MdCancel } from "react-icons/md";
+import {
+  BsCheckCircleFill,
+  BsFillClockFill,
+  BsFillXCircleFill,
+} from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import { ApiResponse } from "../../services/types";
@@ -43,6 +48,37 @@ export const TodayAppointments = () => {
     return `${hours12}:${minutes} ${ampm}`;
   };
 
+  const getConfirmation = () => {
+    const statuses = ["Confirmed", "Cancelled", "Pending"];
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+    if (randomStatus === "Confirmed") {
+      return (
+        <Tooltip label="Confirmed" aria-label="Confirmed" bg="green.500">
+          <span>
+            <Icon as={BsCheckCircleFill} color="green.500" />
+          </span>
+        </Tooltip>
+      );
+    } else if (randomStatus === "Cancelled") {
+      return (
+        <Tooltip label="Cancelled" aria-label="Cancelled" bg="red.500">
+          <span>
+            <Icon as={BsFillXCircleFill} color="red.500" />
+          </span>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip label="Pending" aria-label="Pending" bg="yellow.500">
+          <span>
+            <Icon as={BsFillClockFill} color="yellow.500" />
+          </span>
+        </Tooltip>
+      );
+    }
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -51,7 +87,6 @@ export const TodayAppointments = () => {
       borderColor="gray.100"
       h="100%"
       backgroundColor="#FAFAFC"
-      position="relative"
       overflowY="auto"
     >
       <CardHeader>
@@ -79,7 +114,17 @@ export const TodayAppointments = () => {
                     backgroundColor="gray.300"
                   />
                   <Flex flexDir="column" alignItems="flex-start">
-                    <Text fontWeight="bold" color="gray.800">
+                    <Text
+                      fontWeight="bold"
+                      color="gray.800"
+                      onClick={() =>
+                        navigate(`/${appointment.player.id}/appointments`)
+                      }
+                      _hover={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                    >
                       {appointment.player.name}
                     </Text>
                     <Text color="gray.600" fontSize="sm">
@@ -87,11 +132,7 @@ export const TodayAppointments = () => {
                     </Text>
                   </Flex>
                   <Flex alignItems="center">
-                    {Math.random() > 0.5 ? (
-                      <Icon as={BsCheckCircleFill} color="green.500" />
-                    ) : (
-                      <Icon as={MdCancel} color="red.500" />
-                    )}
+                    {getConfirmation()}
                     <Text ml="2" color="gray.600" fontSize="md">
                       {formatTime(appointment.time)}
                     </Text>
@@ -100,17 +141,16 @@ export const TodayAppointments = () => {
               );
             })}
         </Stack>
-
-        <Flex mt="4" position="absolute" bottom="0" py="1em">
-          <Button
-            variant="link"
-            colorScheme="black"
-            onClick={() => navigate("/appointments")}
-          >
-            View All
-          </Button>
-        </Flex>
       </CardBody>
+      <CardFooter>
+        <Button
+          variant="link"
+          colorScheme="black"
+          onClick={() => navigate("/appointments")}
+        >
+          View All
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

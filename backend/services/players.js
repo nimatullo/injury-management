@@ -205,6 +205,19 @@ class PlayerService {
         });
     });
   }
+
+  async getThreeMostRecentExercises(playerId) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getThreeMostRecentExercises(playerId)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = PlayerService;

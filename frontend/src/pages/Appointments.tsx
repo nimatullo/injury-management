@@ -21,7 +21,7 @@ export const Appointments = () => {
   return (
     player && (
       <>
-        <PlayerDetails player={player} isExtended={true} />
+        <PlayerDetails player={player} displayExercises />
 
         <RangeChart playerId={player.id} />
       </>
