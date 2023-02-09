@@ -9,11 +9,13 @@ import { AppointmentsList } from "./AppointmentsList";
 interface AppointmentsSummaryProps {
   player: PlayerInformation;
   injuries: any[];
+  isExtended?: boolean;
 }
 
 export const AppointmentsSummary = ({
   player,
   injuries,
+  isExtended,
 }: AppointmentsSummaryProps) => {
   const [upcomingAppointments, setUpcomingAppointments] = React.useState<any>(
     []
@@ -23,16 +25,26 @@ export const AppointmentsSummary = ({
 
   React.useEffect(() => {
     fetchAppointments();
+    console.log("isExtended", isExtended);
   }, []);
 
   const fetchAppointments = async () => {
-    ApiService.get(`players/${player.id}/appointments`).then(
-      (res: ApiResponse) => {
-        if (res.status === 200) {
+    let endpoint = `players/${player.id}/appointments`;
+    if (isExtended) {
+      endpoint += "/all";
+    }
+
+    ApiService.get(endpoint).then((res: ApiResponse) => {
+      if (res.status === 200) {
+        if (isExtended) {
+          setUpcomingAppointments({
+            appointments: res.data,
+          });
+        } else {
           setUpcomingAppointments(res.data);
         }
       }
-    );
+    });
   };
 
   return (
@@ -50,7 +62,10 @@ export const AppointmentsSummary = ({
       </Heading>
       <Flex flexDir="column">
         {upcomingAppointments ? (
-          <AppointmentsList appointments={upcomingAppointments} />
+          <AppointmentsList
+            appointments={upcomingAppointments}
+            isExtended={isExtended}
+          />
         ) : (
           <Text>Loading...</Text>
         )}

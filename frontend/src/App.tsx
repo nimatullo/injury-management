@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Dashboard } from "./pages/Dashboard";
 import { InjuryReport } from "./pages/InjuryReport";
 import { Appointments } from "./pages/Appointments";
+import { AllAppointments } from "./pages/AllAppointments";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path=":id/injury-report" element={<InjuryReport />} />
           <Route path=":id/appointments" element={<Appointments />} />
+          <Route path="/appointments" element={<AllAppointments />} />
         </Routes>
       </ChakraProvider>
     </BrowserRouter>

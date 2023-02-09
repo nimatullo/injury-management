@@ -52,6 +52,7 @@ export const TodayAppointments = () => {
       h="100%"
       backgroundColor="#FAFAFC"
       position="relative"
+      overflowY="auto"
     >
       <CardHeader>
         <Heading size="md">Today's Appointments</Heading>
@@ -67,7 +68,7 @@ export const TodayAppointments = () => {
                   alignItems="center"
                   justifyItems="start"
                   borderBottomWidth={1}
-                  borderColor="gray.300"
+                  borderColor="gray.200"
                   p="1"
                 >
                   <Avatar

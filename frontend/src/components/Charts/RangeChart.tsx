@@ -3,6 +3,7 @@ import { Channel, Epg, Layout, Program, useEpg } from "planby";
 import React from "react";
 import ApiService from "../../services/ApiService";
 import timelineTheme from "../../assets/timelineTheme";
+import moment from "moment";
 
 export const RangeChart = ({ playerId }: any) => {
   const [channels, setChannels] = React.useState<Channel[]>([]);
@@ -10,7 +11,7 @@ export const RangeChart = ({ playerId }: any) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const [selectedDate, setSelectedDate] = React.useState<string>(
-    new Date().toISOString().substring(0, 10)
+    moment().format("YYYY-MM-DD")
   );
 
   const channelsData = React.useMemo(() => channels, [channels]);
@@ -19,11 +20,12 @@ export const RangeChart = ({ playerId }: any) => {
   const handleFetchResources = React.useCallback(async () => {
     setIsLoading(true);
     const appointments = await ApiService.getAppointmentsForTimeline(playerId);
-    const channels = [
-      {
-        uuid: "1",
-      },
-    ];
+
+    const channels = appointments.map((appointment: any, index: number) => {
+      return {
+        uuid: index.toString(),
+      };
+    });
 
     setAppointments(appointments as Program[]);
     setChannels(channels as Channel[]);
@@ -37,10 +39,8 @@ export const RangeChart = ({ playerId }: any) => {
     itemHeight: 100,
     isSidebar: false,
     isTimeline: true,
-    startDate:
-      new Date(selectedDate).toISOString().substring(0, 10) + "T07:00:00",
-    endDate:
-      new Date(selectedDate).toISOString().substring(0, 10) + "T23:00:00",
+    startDate: moment(selectedDate).format("YYYY-MM-DD") + "T07:00:00",
+    endDate: moment(selectedDate).format("YYYY-MM-DD") + "T23:00:00",
     isBaseTimeFormat: true,
     theme: timelineTheme,
   });
@@ -59,7 +59,9 @@ export const RangeChart = ({ playerId }: any) => {
               maxW="300px"
               type="date"
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              onChange={(e) =>
+                setSelectedDate(moment(e.target.value).format("YYYY-MM-DD"))
+              }
             />
           </Flex>
         )}

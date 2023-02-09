@@ -1,7 +1,7 @@
 const timelineTheme = {
   primary: {
     600: "#1a1a1a",
-    900: "#edf2f7",
+    900: "#FAFAFC",
   },
   grey: { 300: "#fff" },
   white: "#fff",

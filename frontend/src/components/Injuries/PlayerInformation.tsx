@@ -18,11 +18,15 @@ import { AppointmentsSummary } from "../Appointments/AppointmentsSummary";
 
 export interface PlayerInformationProps {
   player: PlayerInformation;
+  isExtended?: boolean;
 }
 
 const recoveredInjuries = ["Ankle", "Back", "Calf"];
 
-export const PlayerDetails = ({ player }: PlayerInformationProps) => {
+export const PlayerDetails = ({
+  player,
+  isExtended,
+}: PlayerInformationProps) => {
   const [currentInjuries, setCurrentInjuries] = React.useState<any>([]);
 
   React.useEffect(() => {
@@ -108,7 +112,11 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
           p="1em"
           boxShadow="md"
         >
-          <AppointmentsSummary player={player} injuries={currentInjuries} />
+          <AppointmentsSummary
+            isExtended={isExtended}
+            player={player}
+            injuries={currentInjuries}
+          />
         </GridItem>
       </Grid>
     </Center>

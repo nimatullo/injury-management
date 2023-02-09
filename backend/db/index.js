@@ -1,4 +1,5 @@
 const { db } = require("../prisma");
+const moment = require("moment");
 
 class MongoService {
   constructor() {
@@ -337,6 +338,9 @@ class MongoService {
               include: {
                 forTreatment: true,
               },
+              orderBy: {
+                date: "asc",
+              },
             },
           },
         })
@@ -366,6 +370,29 @@ class MongoService {
                 date: "asc",
               },
             },
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getAppointments(date) {
+    const formattedDate = moment(date, "YYYY-MM-DD").format("MM-DD-YYYY");
+
+    return new Promise((resolve, reject) => {
+      this.db.appointment
+        .findMany({
+          where: {
+            date: new Date(formattedDate),
+          },
+          include: {
+            forTreatment: true,
+            player: true,
           },
         })
         .then((data) => {

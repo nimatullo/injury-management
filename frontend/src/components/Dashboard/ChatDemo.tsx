@@ -32,6 +32,7 @@ export const ChatDemo = () => {
       borderColor="gray.100"
       h="100%"
       backgroundColor="#FAFAFC"
+      overflowY="auto"
     >
       <CardHeader>
         <Heading size="md">Messages</Heading>
@@ -44,7 +45,7 @@ export const ChatDemo = () => {
               <HStack
                 w="100%"
                 borderBottomWidth="1px"
-                borderColor="gray.300"
+                borderColor="gray.200"
                 p="2"
               >
                 <Avatar

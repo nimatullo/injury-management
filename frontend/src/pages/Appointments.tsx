@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { RangeChart } from "../components/Charts/RangeChart";
@@ -20,7 +21,7 @@ export const Appointments = () => {
   return (
     player && (
       <>
-        <PlayerDetails player={player} />
+        <PlayerDetails player={player} isExtended={true} />
 
         <RangeChart playerId={player.id} />
       </>

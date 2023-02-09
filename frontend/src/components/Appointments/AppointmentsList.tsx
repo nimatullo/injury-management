@@ -14,11 +14,15 @@ import React from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { AppointmentEditModal } from "./AppointmentEditModal";
 
-export const AppointmentsList = ({ appointments }: any) => {
+export const AppointmentsList = ({ appointments, isExtended }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [selectedAppointment, setSelectedAppointment] =
     React.useState<any>(null);
+
+  React.useEffect(() => {
+    console.log("isExtended", isExtended);
+  }, [isExtended]);
 
   const convert24to12 = (time: string) => {
     const [hours, minutes] = time.split(":");
@@ -74,7 +78,9 @@ export const AppointmentsList = ({ appointments }: any) => {
           );
         })}
       </Tbody>
-      {appointments.total > 3 && <Text>+ {appointments.total - 3} more</Text>}
+      {(appointments.total > 3 || !isExtended) && (
+        <Text>+ {appointments.total - 3} more</Text>
+      )}
     </Table>
   ) : (
     <Text>No upcoming appointments</Text>

@@ -1,3 +1,4 @@
+import moment from "moment";
 import { ApiResponse, ApiOptions, ListItems } from "./types";
 
 const API_URL = "http://localhost:8000/";
@@ -90,11 +91,15 @@ class ApiService {
       (response) => {
         if (response.status === 200) {
           return response.data.map((a: any, index: number) => {
-            const start = new Date(a.date);
+            const dateFormat = moment(a.date, "YYYY-MM-DD").format(
+              "MM-DD-YYYY"
+            );
+
+            const start = new Date(dateFormat);
             start.setHours(parseInt(a.time.split(":")[0]));
             start.setMinutes(parseInt(a.time.split(":")[1]));
 
-            const end = new Date(a.date);
+            const end = new Date(dateFormat);
             end.setHours(parseInt(a.time.split(":")[0]) + 1);
             end.setMinutes(parseInt(a.time.split(":")[1]));
 
@@ -103,7 +108,7 @@ class ApiService {
               title: a.forTreatment.treatmentName,
               since: start.toISOString(),
               till: end.toISOString(),
-              channelUuid: "1",
+              channelUuid: index.toString(),
             };
           });
         }
@@ -115,14 +120,13 @@ class ApiService {
     const endpoint =
       "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2022/league/00_full_schedule.json";
 
-    const todayDate = new Date();
-    // Get the next Brooklyn Nets game
+    const todayDate = new Date(moment().format("MM-DD-YYYY"));
     return fetch(endpoint)
       .then((response) => response.json())
       .then((data) => {
         const games = data.lscd[1].mscd.g;
         const nextGame = games.find((game: any) => {
-          const gameDate = new Date(game.gdte);
+          const gameDate = new Date(moment(game.gdte).format("MM-DD-YYYY"));
           return (
             gameDate.getTime() >= todayDate.getTime() &&
             (game.h.ta === "BKN" || game.v.ta === "BKN")
@@ -130,6 +134,32 @@ class ApiService {
         });
         return nextGame;
       });
+  }
+
+  public static async getAppointments(date: string) {
+    return this.get(`appointments/${date}`).then((res: ApiResponse) => {
+      if (res.status === 200) {
+        return res.data.map((a: any, index: number) => {
+          const dateFormat = moment(a.date, "YYYY-MM-DD").format("MM-DD-YYYY");
+
+          const start = new Date(dateFormat);
+          start.setHours(parseInt(a.time.split(":")[0]));
+          start.setMinutes(parseInt(a.time.split(":")[1]));
+
+          const end = new Date(dateFormat);
+          end.setHours(parseInt(a.time.split(":")[0]) + 1);
+          end.setMinutes(parseInt(a.time.split(":")[1]));
+
+          return {
+            id: a.id,
+            title: a.forTreatment.treatmentName,
+            since: start.toISOString(),
+            till: end.toISOString(),
+            channelUuid: a.playerId,
+          };
+        });
+      }
+    });
   }
 }
 
