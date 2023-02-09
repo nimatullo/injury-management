@@ -382,17 +382,44 @@ class MongoService {
   }
 
   async getAppointments(date) {
-    const formattedDate = moment(date, "YYYY-MM-DD").format("MM-DD-YYYY");
+    console.log(new Date(date).toISOString());
 
     return new Promise((resolve, reject) => {
       this.db.appointment
         .findMany({
           where: {
-            date: new Date(formattedDate),
+            date: new Date(date),
           },
           include: {
             forTreatment: true,
             player: true,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  async getAllAppointments() {
+    return new Promise((resolve, reject) => {
+      this.db.appointment
+        .findMany({
+          where: {
+            date: {
+              gte: new Date(moment().format("MM-DD-YYYY")),
+            },
+          },
+          include: {
+            forTreatment: true,
+            player: true,
+          },
+          orderBy: {
+            date: "asc",
           },
         })
         .then((data) => {

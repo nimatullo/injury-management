@@ -156,6 +156,11 @@ class ApiService {
             since: start.toISOString(),
             till: end.toISOString(),
             channelUuid: a.playerId,
+            channel: {
+              uuid: a.playerId,
+              logo: a.player.playerPhoto,
+              title: a.player.name,
+            },
           };
         });
       }

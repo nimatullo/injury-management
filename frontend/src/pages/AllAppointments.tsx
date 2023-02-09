@@ -3,32 +3,40 @@ import { Channel, Epg, Layout, Program, useEpg } from "planby";
 import React from "react";
 import ApiService from "../services/ApiService";
 import timelineTheme from "../assets/timelineTheme";
-import { Box, Input } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import { PlayerTimelineItem } from "../components/Appointments/PlayerTimelineItem";
+import { CalendarView } from "../components/Appointments/CalendarView";
 
 export const AllAppointments = () => {
   const [players, setPlayers] = React.useState<Channel[]>([]);
   const [appointments, setAppointments] = React.useState<Program[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [date, setDate] = React.useState(moment().format("YYYY-MM-DD"));
+  const [date, setDate] = React.useState(new Date());
 
-  const channelsData = React.useMemo(() => players, [players]);
-  const appointmentsData = React.useMemo(() => appointments, [appointments]);
-
-  const handleFetchResources = React.useCallback(async () => {
+  const handleFetchResources = async () => {
     setIsLoading(true);
-    const apps = await ApiService.getAppointments(date);
-    const players = apps.map((appointment: any) => {
-      return {
-        uuid: appointment.channelUuid,
-      };
-    });
+    const formattedDate = moment(date).format("YYYY-MM-DD");
+    const apps = await ApiService.getAppointments(formattedDate);
+    console.log(apps);
+    const players = apps
+      .reduce((acc: any, appointment: any) => {
+        if (
+          !acc.find(
+            (channel: any) => channel.channelUuid === appointment.channelUuid
+          )
+        ) {
+          acc.push(appointment);
+        }
+        return acc;
+      }, [])
+      .map((appointment: any) => {
+        return appointment.channel;
+      });
 
     setAppointments(apps as Program[]);
     setPlayers(players as Channel[]);
-    console.log("Running...");
     setIsLoading(false);
-  }, []);
+  };
 
   const { getEpgProps, getLayoutProps } = useEpg({
     channels: players,
@@ -48,21 +56,26 @@ export const AllAppointments = () => {
   }, [date]);
 
   return (
-    <Box h="100%">
-      <Input
+    <Grid templateColumns="3fr 1fr">
+      {/* <Input
         type="date"
         value={date}
         onChange={(e) => setDate(moment(e.target.value).format("YYYY-MM-DD"))}
-      />
+      /> */}
 
-      <Epg isLoading={isLoading} {...getEpgProps()}>
-        <Layout
-          {...getLayoutProps()}
-          renderChannel={({ channel }) => (
-            <PlayerTimelineItem key={channel.uuid} channel={channel} />
-          )}
-        />
-      </Epg>
-    </Box>
+      <GridItem width="80vw" h="100vh">
+        <Epg isLoading={isLoading} {...getEpgProps()}>
+          <Layout
+            {...getLayoutProps()}
+            renderChannel={({ channel }) => (
+              <PlayerTimelineItem key={channel.uuid} channel={channel} />
+            )}
+          />
+        </Epg>
+      </GridItem>
+      <GridItem w="20vw">
+        <CalendarView date={date} setDate={setDate} />
+      </GridItem>
+    </Grid>
   );
 };

@@ -58,7 +58,7 @@ export const LineChart = ({ graphData }) => {
             tooltip: false,
             getSeriesStyle: (series) => ({
               color: "black",
-              strokeWidth: 3,
+              strokeWidth: 4,
             }),
           }}
         />

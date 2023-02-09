@@ -6,6 +6,7 @@ import {
   CardHeader,
   Flex,
   Heading,
+  HStack,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -74,7 +75,12 @@ export const UpcomingGame = () => {
           backgroundColor="#FAFAFC"
         >
           <CardHeader>
-            <Heading size="md">Upcoming Game</Heading>
+            <HStack alignItems="flex-end">
+              <Heading size="md">Upcoming Game</Heading>
+              <Text fontSize="sm" color="gray.500">
+                {moment(upcomingGame.gdte).format("MMM do, YYYY")}
+              </Text>
+            </HStack>
           </CardHeader>
           <CardBody>
             <Flex alignItems="center" w="100%" justifyContent="space-evenly">
@@ -84,7 +90,7 @@ export const UpcomingGame = () => {
               </Stack>
               <Box textAlign="center">
                 <Text fontSize="sm">{formatDate(upcomingGame.gdte)}</Text>
-                <Heading>vs.</Heading>
+                <Heading>at</Heading>
                 <Text fontSize="sm">{upcomingGame.stt}</Text>
                 <Text>
                   <strong>{upcomingGame.an}</strong>

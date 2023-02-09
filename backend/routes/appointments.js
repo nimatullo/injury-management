@@ -4,6 +4,18 @@ const AppointmentService = require("../services/appointments");
 
 const service = new AppointmentService();
 
+router.get("/", async (req, res) => {
+  service
+    .getAllAppointments()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
 router.get("/:date", async (req, res) => {
   const { date } = req.params;
   if (!date) {
