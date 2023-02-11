@@ -3,7 +3,7 @@ import { Channel, Epg, Layout, Program, useEpg } from "planby";
 import React from "react";
 import ApiService from "../services/ApiService";
 import timelineTheme from "../assets/timelineTheme";
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Center, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import { PlayerTimelineItem } from "../components/Appointments/PlayerTimelineItem";
 import { CalendarView } from "../components/Appointments/CalendarView";
 
@@ -65,14 +65,28 @@ export const AllAppointments = () => {
   return (
     <Grid templateColumns="repeat(5, 1fr)">
       <GridItem h="100vh" colSpan={4}>
-        <Epg isLoading={isLoading} {...getEpgProps()}>
-          <Layout
-            {...getLayoutProps()}
-            renderChannel={({ channel }) => (
-              <PlayerTimelineItem key={channel.uuid} channel={channel} />
-            )}
-          />
-        </Epg>
+        {appointments.length > 0 ? (
+          <Epg isLoading={isLoading} {...getEpgProps()}>
+            <Layout
+              {...getLayoutProps()}
+              renderChannel={({ channel }) => (
+                <PlayerTimelineItem key={channel.uuid} channel={channel} />
+              )}
+            />
+          </Epg>
+        ) : (
+          <Center
+            h="100vh"
+            flexDirection="column"
+            borderRight="1px solid #e2e8f0"
+          >
+            <Heading mb="5">No Appointments</Heading>
+            <Text maxW="500px" textAlign="center">
+              You have no appointments scheduled for this day. Click "Schedule
+              New Appointment" to schedule an appointment.
+            </Text>
+          </Center>
+        )}
       </GridItem>
       <GridItem w="20vw">
         <CalendarView date={date} setDate={setDate} />

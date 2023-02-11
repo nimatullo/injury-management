@@ -35,9 +35,10 @@ export const NewAppointmentButton = ({ cb }: NewAppointmentButtonProps) => {
 
   return (
     <>
-      <Box display="flex" justifyContent="center" alignItems="center" py="1em">
+      <Box display="flex" alignItems="center" py="1em">
         <Button
           w="100%"
+          maxWidth="350px"
           size="sm"
           leftIcon={<BsFillCalendarPlusFill />}
           colorScheme="black"
@@ -65,9 +66,7 @@ const NewAppointmentModal = ({
 
   const [selectedInjury, setSelectedInjury] = React.useState("");
   const [selectedTreatment, setSelectedTreatment] = React.useState("");
-  const [appointmentDateTime, setAppointmentDateTime] = React.useState(
-    new Date().toISOString()
-  );
+  const [appointmentDateTime, setAppointmentDateTime] = React.useState("");
 
   React.useEffect(() => {
     const endpoint = "players/injured";
@@ -103,14 +102,16 @@ const NewAppointmentModal = ({
       dateTime: appointmentDateTime,
     };
 
-    console.log(data);
+    ApiService.post(endpoint, data).then((res) => {
+      if (res.status === 200) {
+        onClose();
+        cb();
+      }
+    });
+  };
 
-    // ApiService.post(endpoint, data).then((res) => {
-    //   if (res.status === 200) {
-    //     onClose();
-    //     cb();
-    //   }
-    // });
+  const handleDateTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setAppointmentDateTime(e.target.value);
   };
 
   return (
@@ -159,14 +160,15 @@ const NewAppointmentModal = ({
               placeholder="Enter appointment date and time"
               type="datetime-local"
               value={appointmentDateTime}
-              onChange={console.log}
+              onChange={handleDateTimeChange}
+              onInput={handleDateTimeChange}
             />
           </FormControl>
 
           <FormControl my="2">
             <FormLabel>Treatment</FormLabel>
             <AutoSuggestionField
-              disabled={treatments.length === 0}
+              disabled={!selectedInjury}
               placeholder="Start typing to see suggestions"
               onSelect={(t) => setSelectedTreatment(t)}
               options={treatments}
