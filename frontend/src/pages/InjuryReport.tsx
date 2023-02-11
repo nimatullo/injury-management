@@ -5,12 +5,13 @@ import ApiService from "../services/ApiService";
 import { ApiResponse } from "../services/types";
 import { InjuryGraphs } from "../components/Injuries/InjuryGraphs";
 import { PlayerDetails } from "../components/Injuries/PlayerInformation";
+import { NewAppointmentButton } from "../components/Injuries/NewAppointmentModal";
 
 export const InjuryReport = () => {
   const [player, setPlayer] = React.useState<any>(null);
 
   React.useEffect(() => {
-    const endpoint = `players/${params.id}`;
+    let endpoint = `players/${params.id}`;
     ApiService.get(endpoint).then((res: ApiResponse) => {
       setPlayer(res.data);
     });
@@ -19,7 +20,7 @@ export const InjuryReport = () => {
   const params = useParams();
 
   return (
-    <Box mt="5">
+    <Box mt="5" w="90%">
       <div>{player && <PlayerDetails player={player} />}</div>
       <InjuryGraphs />
     </Box>

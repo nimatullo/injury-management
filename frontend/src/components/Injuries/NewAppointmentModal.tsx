@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   FormLabel,
@@ -22,44 +23,31 @@ import AutoSuggestionField from "../Form/AutoSuggestionField";
 interface NewAppointmentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  player: any;
-  injuries: any;
   cb: () => void;
 }
 
 interface NewAppointmentButtonProps {
-  player: any;
-  injuries: any;
   cb: () => void;
 }
 
-export const NewAppointmentButton = ({
-  player,
-  injuries,
-  cb,
-}: NewAppointmentButtonProps) => {
+export const NewAppointmentButton = ({ cb }: NewAppointmentButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Button
-        mt="2"
-        size="sm"
-        leftIcon={<BsFillCalendarPlusFill />}
-        backgroundColor="whiteAlpha.900"
-        color="black"
-        onClick={onOpen}
-      >
-        Schedule
-      </Button>
+      <Box display="flex" justifyContent="center" alignItems="center" py="1em">
+        <Button
+          w="100%"
+          size="sm"
+          leftIcon={<BsFillCalendarPlusFill />}
+          colorScheme="black"
+          onClick={onOpen}
+        >
+          Schedule New Appointment
+        </Button>
+      </Box>
 
-      <NewAppointmentModal
-        isOpen={isOpen}
-        onClose={onClose}
-        player={player}
-        injuries={injuries}
-        cb={cb}
-      />
+      <NewAppointmentModal isOpen={isOpen} onClose={onClose} cb={cb} />
     </>
   );
 };
@@ -67,16 +55,35 @@ export const NewAppointmentButton = ({
 const NewAppointmentModal = ({
   isOpen,
   onClose,
-  player,
-  injuries,
   cb,
 }: NewAppointmentModalProps) => {
+  const [injuredPlayers, setInjuredPlayers] = React.useState<any[]>([]);
+  const [selectedPlayer, setSelectedPlayer] = React.useState<any>("");
   const [treatments, setTreatments] = React.useState([]);
+
+  const [injuries, setInjuries] = React.useState<any[]>([]);
 
   const [selectedInjury, setSelectedInjury] = React.useState("");
   const [selectedTreatment, setSelectedTreatment] = React.useState("");
-  const [appointmentDate, setAppointmentDate] = React.useState("");
-  const [appointmentTime, setAppointmentTime] = React.useState("");
+  const [appointmentDateTime, setAppointmentDateTime] = React.useState(
+    new Date().toISOString()
+  );
+
+  React.useEffect(() => {
+    const endpoint = "players/injured";
+    ApiService.get(endpoint).then((res) => {
+      setInjuredPlayers(res.data);
+    });
+  }, []);
+
+  const handlePlayerChange = (e: any) => {
+    const playerId = e.target.value;
+    setInjuries(
+      injuredPlayers.find((player: any) => player.id === playerId).injuries
+    );
+
+    setSelectedPlayer(playerId);
+  };
 
   const handleInjuryChange = (e: any) => {
     const injuryName = e.target.value;
@@ -89,20 +96,21 @@ const NewAppointmentModal = ({
   };
 
   const handleSubmit = () => {
-    const endpoint = `players/${player.id}/appointments`;
+    const endpoint = `players/${selectedPlayer}/appointments`;
     const data = {
       injuryName: selectedInjury,
       treatment: selectedTreatment,
-      date: appointmentDate,
-      time: appointmentTime,
+      dateTime: appointmentDateTime,
     };
 
-    ApiService.post(endpoint, data).then((res) => {
-      if (res.status === 200) {
-        onClose();
-        cb();
-      }
-    });
+    console.log(data);
+
+    // ApiService.post(endpoint, data).then((res) => {
+    //   if (res.status === 200) {
+    //     onClose();
+    //     cb();
+    //   }
+    // });
   };
 
   return (
@@ -110,12 +118,32 @@ const NewAppointmentModal = ({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Heading size="md">New Appointment for {player.name}</Heading>
+          <Heading size="md">New Appointment</Heading>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl my="2">
-            <Select placeholder="Select injury" onChange={handleInjuryChange}>
+            <FormLabel>Player</FormLabel>
+            <Select
+              placeholder="Select injured player"
+              onChange={handlePlayerChange}
+            >
+              {injuredPlayers &&
+                injuredPlayers.map((player: any) => (
+                  <option key={player.id} value={player.id}>
+                    {player.name}
+                  </option>
+                ))}
+            </Select>
+          </FormControl>
+
+          <FormControl my="2">
+            <FormLabel>Injury</FormLabel>
+            <Select
+              disabled={injuries.length === 0}
+              placeholder="Select injury"
+              onChange={handleInjuryChange}
+            >
               {injuries &&
                 injuries.map((injury: any) => (
                   <option key={injury.id} value={injury.injuryName}>
@@ -126,28 +154,20 @@ const NewAppointmentModal = ({
           </FormControl>
 
           <FormControl my="2">
-            <FormLabel>Appointment Date</FormLabel>
+            <FormLabel>Appointment Date & Time</FormLabel>
             <Input
-              placeholder="Enter appointment date"
-              type="date"
-              value={appointmentDate}
-              onChange={(e) => setAppointmentDate(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl my="2">
-            <FormLabel>Appointment Time</FormLabel>
-            <Input
-              placeholder="Appointment time"
-              type="time"
-              onChange={(e) => setAppointmentTime(e.target.value)}
+              placeholder="Enter appointment date and time"
+              type="datetime-local"
+              value={appointmentDateTime}
+              onChange={console.log}
             />
           </FormControl>
 
           <FormControl my="2">
             <FormLabel>Treatment</FormLabel>
             <AutoSuggestionField
-              placeholder="Select treatment"
+              disabled={treatments.length === 0}
+              placeholder="Start typing to see suggestions"
               onSelect={(t) => setSelectedTreatment(t)}
               options={treatments}
             />

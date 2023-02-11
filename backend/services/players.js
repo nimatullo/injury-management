@@ -123,10 +123,10 @@ class PlayerService {
     });
   }
 
-  async createAppointment(playerId, date, time, treatment, forInjury) {
+  async createAppointment(playerId, dateTime, treatment, forInjury) {
     return new Promise((resolve, reject) => {
       this.mongoService
-        .createAppointment(playerId, date, time, treatment, forInjury)
+        .createAppointment(playerId, dateTime, treatment, forInjury)
         .then((data) => {
           resolve(data);
         })
@@ -167,10 +167,10 @@ class PlayerService {
     });
   }
 
-  async updateAppointment(appointmentId, date, time, notes) {
+  async updateAppointment(appointmentId, dateTime, notes) {
     return new Promise((resolve, reject) => {
       this.mongoService
-        .updateAppointment(appointmentId, date, time, notes)
+        .updateAppointment(appointmentId, dateTime, notes)
         .then((data) => {
           resolve(data);
         })

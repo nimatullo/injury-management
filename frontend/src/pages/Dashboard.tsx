@@ -6,10 +6,13 @@ import {
   Grid,
   GridItem,
   Heading,
+  HStack,
   Text,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { ChatDemo } from "../components/Dashboard/ChatDemo";
+import { PinnedPlayers } from "../components/Dashboard/PinnedPlayers";
+import Sidebar from "../components/Dashboard/Sidebar";
 import { TodayAppointments } from "../components/Dashboard/TodayAppointments";
 import { UpcomingGame } from "../components/Dashboard/UpcomingGame";
 
@@ -17,30 +20,30 @@ import { TeamInjurySummary } from "../components/Injuries/TeamInjurySummary";
 
 export const Dashboard = () => {
   return (
-    <Grid
-      templateColumns="repeat(4, 1fr)"
-      templateRows="repeat(3, 1fr)"
-      gap={4}
-      h="100vh"
-      p="1em"
-    >
-      <GridItem rowSpan={1} colSpan={2}>
-        <Text>
-          Hello, <strong>Doctor</strong>
-        </Text>
-      </GridItem>
-      <GridItem rowSpan={2}>
-        <TodayAppointments />
-      </GridItem>
-      <GridItem rowSpan={2}>
-        <ChatDemo />
-      </GridItem>
-      <GridItem rowSpan={2} colSpan={2}>
-        <TeamInjurySummary />
-      </GridItem>
-      <GridItem colSpan={2}>
-        <UpcomingGame />
-      </GridItem>
-    </Grid>
+    <>
+      <Grid
+        templateColumns="repeat(4, 1fr)"
+        templateRows="repeat(6, 1fr)"
+        gap={4}
+        h="100vh"
+        p="1em"
+      >
+        <GridItem rowSpan={3} colSpan={2}>
+          <PinnedPlayers />
+        </GridItem>
+        <GridItem rowSpan={5}>
+          <TodayAppointments />
+        </GridItem>
+        <GridItem rowSpan={5}>
+          <ChatDemo />
+        </GridItem>
+        <GridItem rowSpan={3} colSpan={2}>
+          <TeamInjurySummary />
+        </GridItem>
+        <GridItem colSpan={2}>
+          <UpcomingGame />
+        </GridItem>
+      </Grid>
+    </>
   );
 };

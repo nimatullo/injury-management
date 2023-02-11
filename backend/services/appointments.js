@@ -34,14 +34,14 @@ class AppointmentService {
   }
 
   groupByDate(appointments) {
+    // Group by date, not including time
     const groupedAppointments = appointments.reduce((acc, appointment) => {
-      const date = appointment.date.toISOString();
-      if (!acc[date]) {
-        acc[date] = [];
-      }
+      const date = moment(appointment.dateTime).format("YYYY-MM-DD");
+      acc[date] = acc[date] || [];
       acc[date].push(appointment);
       return acc;
     }, {});
+
     return groupedAppointments;
   }
 }

@@ -15,9 +15,8 @@ export const AllAppointments = () => {
 
   const handleFetchResources = async () => {
     setIsLoading(true);
-    const formattedDate = moment(date).format("YYYY-MM-DD");
-    const apps = await ApiService.getAppointments(formattedDate);
-    console.log(apps);
+    const formattedDate = new Date(date);
+    const apps = await ApiService.getAppointments(formattedDate.toISOString());
     const players = apps
       .reduce((acc: any, appointment: any) => {
         if (
@@ -38,6 +37,14 @@ export const AllAppointments = () => {
     setIsLoading(false);
   };
 
+  const getBeginningOfDay = (date: Date) => {
+    return moment(date).startOf("day").toDate();
+  };
+
+  const getEndOfDay = (date: Date) => {
+    return moment(date).endOf("day").toDate();
+  };
+
   const { getEpgProps, getLayoutProps } = useEpg({
     channels: players,
     epg: appointments,
@@ -45,8 +52,8 @@ export const AllAppointments = () => {
     itemHeight: 100,
     isSidebar: true,
     isTimeline: true,
-    startDate: moment(date).format("YYYY-MM-DD") + "T07:00:00",
-    endDate: moment(date).format("YYYY-MM-DD") + "T23:00:00",
+    startDate: getBeginningOfDay(date),
+    endDate: getEndOfDay(date),
     isBaseTimeFormat: true,
     theme: timelineTheme,
   });
@@ -56,14 +63,8 @@ export const AllAppointments = () => {
   }, [date]);
 
   return (
-    <Grid templateColumns="3fr 1fr">
-      {/* <Input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(moment(e.target.value).format("YYYY-MM-DD"))}
-      /> */}
-
-      <GridItem width="80vw" h="100vh">
+    <Grid templateColumns="repeat(5, 1fr)">
+      <GridItem h="100vh" colSpan={4}>
         <Epg isLoading={isLoading} {...getEpgProps()}>
           <Layout
             {...getLayoutProps()}

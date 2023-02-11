@@ -49,8 +49,7 @@ export const ChatDemo = () => {
                 p="2"
               >
                 <Avatar
-                  src={player.playerPhoto}
-                  name={player.playerName}
+                  name={player.name}
                   size="md"
                   backgroundColor="gray.300"
                 />

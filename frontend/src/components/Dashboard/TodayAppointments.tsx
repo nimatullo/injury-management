@@ -17,6 +17,7 @@ import {
   Button,
   Tooltip,
   CardFooter,
+  GridItem,
 } from "@chakra-ui/react";
 import React from "react";
 import {
@@ -27,7 +28,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import { ApiResponse } from "../../services/types";
-import { NewAppointmentButton } from "../Injuries/NewAppointmentModal";
 
 export const TodayAppointments = () => {
   const [appointments, setAppointments] = React.useState<any>([]);
@@ -41,11 +41,11 @@ export const TodayAppointments = () => {
     });
   }, []);
 
-  const formatTime = (time: string) => {
-    const [hours, minutes] = time.split(":");
-    const hours12 = parseInt(hours) % 12 || 12;
-    const ampm = parseInt(hours) < 12 || parseInt(hours) === 24 ? "AM" : "PM";
-    return `${hours12}:${minutes} ${ampm}`;
+  const formatTime = (dateTime: string) => {
+    return new Date(dateTime).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const getConfirmation = () => {
@@ -99,44 +99,45 @@ export const TodayAppointments = () => {
             appointments.map((appointment: any) => {
               return (
                 <Grid
-                  templateColumns="1fr 2fr 1fr"
+                  templateColumns="repeat(4, 1fr)"
                   alignItems="center"
                   justifyItems="start"
                   borderBottomWidth={1}
                   borderColor="gray.200"
                   p="1"
                 >
-                  <Avatar
-                    key={appointment.id}
-                    name={appointment.player.name}
-                    src={appointment.player.playerPhoto}
-                    size="md"
-                    backgroundColor="gray.300"
-                  />
-                  <Flex flexDir="column" alignItems="flex-start">
-                    <Text
-                      fontWeight="bold"
-                      color="gray.800"
-                      onClick={() =>
-                        navigate(`/${appointment.player.id}/appointments`)
-                      }
-                      _hover={{
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                      }}
-                    >
-                      {appointment.player.name}
-                    </Text>
-                    <Text color="gray.600" fontSize="sm">
-                      {appointment.forTreatment.treatmentName}
-                    </Text>
-                  </Flex>
-                  <Flex alignItems="center">
-                    {getConfirmation()}
-                    <Text ml="2" color="gray.600" fontSize="md">
-                      {formatTime(appointment.time)}
-                    </Text>
-                  </Flex>
+                  <GridItem>
+                    <Avatar
+                      key={appointment.id}
+                      name={appointment.player.name}
+                      src={appointment.player.playerPhoto}
+                      size="md"
+                      backgroundColor="gray.300"
+                    />
+                  </GridItem>
+                  <GridItem colSpan={2}>
+                    <Flex flexDir="column" alignItems="flex-start">
+                      <Text fontWeight="bold" color="gray.800">
+                        {appointment.player.name}
+                      </Text>
+                      <Text color="gray.600" fontSize="sm">
+                        {appointment.forTreatment.treatmentName}
+                      </Text>
+                    </Flex>
+                  </GridItem>
+                  <GridItem>
+                    <Flex alignItems="center">
+                      {getConfirmation()}
+                      <Text
+                        whiteSpace="nowrap"
+                        ml="2"
+                        color="gray.600"
+                        fontSize="md"
+                      >
+                        {formatTime(appointment.dateTime)}
+                      </Text>
+                    </Flex>
+                  </GridItem>
                 </Grid>
               );
             })}

@@ -234,20 +234,7 @@ class MongoService {
         });
     });
   }
-
-  /**
-   *
-   * @param {string} playerId
-   * @param {string} date
-   * @param {string} time
-   * @param {string} treatment
-   * @param {string} forInjury
-   *
-   * Creates an appointment for a player with a treatment for an injury
-   * if the injury does not have a treatment with the same treatmentName,
-   * it will create a new treatment for the injury
-   */
-  async createAppointment(playerId, date, time, treatmentName, forInjury) {
+  async createAppointment(playerId, dateTime, treatmentName, forInjury) {
     const treatment = await this.db.treatment.findFirst({
       where: {
         treatmentName: treatmentName,
@@ -267,8 +254,7 @@ class MongoService {
             data: {
               upcomingAppointments: {
                 create: {
-                  date: new Date(date),
-                  time: time,
+                  dateTime: new Date(dateTime),
                   forTreatment: {
                     connect: {
                       id: treatment.id,
@@ -300,8 +286,7 @@ class MongoService {
             data: {
               upcomingAppointments: {
                 create: {
-                  date: new Date(date),
-                  time: time,
+                  dateTime: new Date(dateTime),
                   forTreatment: {
                     create: {
                       treatmentName: treatmentName,
@@ -339,7 +324,7 @@ class MongoService {
                 forTreatment: true,
               },
               orderBy: {
-                date: "asc",
+                dateTime: "asc",
               },
             },
           },
@@ -367,7 +352,7 @@ class MongoService {
               },
               take: 3,
               orderBy: {
-                date: "asc",
+                dateTime: "asc",
               },
             },
           },
@@ -381,23 +366,35 @@ class MongoService {
     });
   }
 
-  async getAppointments(date) {
+  async getAppointments(dateTime) {
+    const date = new Date(dateTime);
+    const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const end = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1
+    );
     return new Promise((resolve, reject) => {
       this.db.appointment
         .findMany({
           where: {
-            date: new Date(date),
+            dateTime: {
+              gte: start,
+              lt: end,
+            },
           },
           include: {
             forTreatment: true,
             player: true,
+          },
+          orderBy: {
+            dateTime: "asc",
           },
         })
         .then((data) => {
           resolve(data);
         })
         .catch((err) => {
-          console.log(err);
           reject(err);
         });
     });
@@ -408,8 +405,8 @@ class MongoService {
       this.db.appointment
         .findMany({
           where: {
-            date: {
-              gte: new Date(moment().format("MM-DD-YYYY")),
+            dateTime: {
+              gte: new Date(),
             },
           },
           include: {
@@ -417,7 +414,7 @@ class MongoService {
             player: true,
           },
           orderBy: {
-            date: "asc",
+            dateTime: "asc",
           },
         })
         .then((data) => {
@@ -510,7 +507,7 @@ class MongoService {
     });
   }
 
-  async updateAppointment(appointmentId, date, time, notes) {
+  async updateAppointment(appointmentId, dateTime, notes) {
     return new Promise((resolve, reject) => {
       this.db.appointment
         .update({
@@ -518,8 +515,7 @@ class MongoService {
             id: appointmentId,
           },
           data: {
-            date: new Date(date),
-            time: time,
+            dateTime: new Date(dateTime),
             notes: notes,
           },
         })
@@ -543,7 +539,7 @@ class MongoService {
             exercises: {
               take: 3,
               orderBy: {
-                date: "desc",
+                dateTime: "desc",
               },
             },
           },

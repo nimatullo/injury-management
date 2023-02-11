@@ -23,15 +23,11 @@ import { ExercisesSummary } from "../Exercises/ExercisesSummary";
 
 export interface PlayerInformationProps {
   player: PlayerInformation;
-  displayExercises?: boolean;
 }
 
 const recoveredInjuries = ["Ankle", "Back", "Calf"];
 
-export const PlayerDetails = ({
-  player,
-  displayExercises,
-}: PlayerInformationProps) => {
+export const PlayerDetails = ({ player }: PlayerInformationProps) => {
   const [currentInjuries, setCurrentInjuries] = React.useState<any>([]);
 
   React.useEffect(() => {
@@ -120,23 +116,8 @@ export const PlayerDetails = ({
             p="1em"
             boxShadow="md"
           >
-            {displayExercises ? (
-              <AppointmentsSummary player={player} injuries={currentInjuries} />
-            ) : (
-              <ExercisesSummary playerId={player.id} />
-            )}
+            <ExercisesSummary playerId={player.id} />
           </Box>
-          {!displayExercises && (
-            <Button
-              ml="5"
-              mt="2"
-              onClick={() => navigate(`/${player.id}/appointments`)}
-              variant="link"
-              colorScheme="black"
-            >
-              See Appointments
-            </Button>
-          )}
         </GridItem>
       </Grid>
     </Center>

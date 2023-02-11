@@ -29,7 +29,6 @@ router.get("/appointments/today", async (req, res) => {
   service
     .getTodayAppointments()
     .then((data) => {
-      console.log("FOR SURE");
       res.json(data);
     })
     .catch((err) => {
@@ -158,15 +157,15 @@ router.get("/measurements/:category", async (req, res) => {
 
 router.post("/:id/appointments", async (req, res) => {
   const { id } = req.params;
-  const { date, time, injuryName, treatment } = req.body;
-  if (!id || !date || !time || !injuryName || !treatment) {
+  const { dateTime, injuryName, treatment } = req.body;
+  if (!id || !dateTime || !injuryName || !treatment) {
     res.status(400).json({
-      message: "PlayerId, Date, Time, InjuryName and Treatment are required",
+      message: "PlayerId, DateTime, InjuryName and Treatment are required",
     });
     return;
   }
   service
-    .createAppointment(id, date, time, treatment, injuryName)
+    .createAppointment(id, dateTime, treatment, injuryName)
     .then((data) => {
       res.json(data);
     })
@@ -177,15 +176,15 @@ router.post("/:id/appointments", async (req, res) => {
 
 router.put("/appointments/:appointmentId", async (req, res) => {
   const { appointmentId } = req.params;
-  const { date, time, notes } = req.body;
-  if (!appointmentId || !date || !time) {
+  const { dateTime, notes } = req.body;
+  if (!appointmentId || !dateTime) {
     res.status(400).json({
-      message: "PlayerId, AppointmentId, Date and Time are required",
+      message: "PlayerId, AppointmentId, DateTime are required",
     });
     return;
   }
   service
-    .updateAppointment(appointmentId, date, time, notes)
+    .updateAppointment(appointmentId, dateTime, notes)
     .then((data) => {
       res.json(data);
     })

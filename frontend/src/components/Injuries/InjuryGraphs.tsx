@@ -34,7 +34,7 @@ export const InjuryGraphs = () => {
 
   return (
     <>
-      <Flex padding="1em" alignItems="end" width="100vw">
+      <Flex padding="1em" alignItems="end" w="100%">
         <Box mx="5">
           <FormLabel>Category</FormLabel>
           <Select

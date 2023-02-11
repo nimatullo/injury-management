@@ -6,12 +6,14 @@ interface AutocompleteProps {
   options: ListItems[] | string[];
   onSelect: (value: string) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const AutoSuggestionField: React.FC<AutocompleteProps> = ({
   options,
   onSelect,
   placeholder,
+  disabled,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -84,6 +86,7 @@ const AutoSuggestionField: React.FC<AutocompleteProps> = ({
         value={inputValue}
         onChange={handleInputChange}
         placeholder={placeholder}
+        disabled={disabled}
       />
       {showSuggestions && (
         <List

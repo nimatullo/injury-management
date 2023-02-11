@@ -120,19 +120,22 @@ class ApiService {
     const endpoint =
       "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2022/league/00_full_schedule.json";
 
-    const todayDate = new Date(moment().format("MM-DD-YYYY"));
+    const todayDate = new Date();
     return fetch(endpoint)
       .then((response) => response.json())
       .then((data) => {
         const games = data.lscd[1].mscd.g;
         const nextGame = games.find((game: any) => {
-          const gameDate = new Date(moment(game.gdte).format("MM-DD-YYYY"));
+          const gameDate = new Date(game.gdte);
           return (
             gameDate.getTime() >= todayDate.getTime() &&
             (game.h.ta === "BKN" || game.v.ta === "BKN")
           );
         });
         return nextGame;
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }
 
@@ -140,15 +143,9 @@ class ApiService {
     return this.get(`appointments/${date}`).then((res: ApiResponse) => {
       if (res.status === 200) {
         return res.data.map((a: any, index: number) => {
-          const dateFormat = moment(a.date, "YYYY-MM-DD").format("MM-DD-YYYY");
-
-          const start = new Date(dateFormat);
-          start.setHours(parseInt(a.time.split(":")[0]));
-          start.setMinutes(parseInt(a.time.split(":")[1]));
-
-          const end = new Date(dateFormat);
-          end.setHours(parseInt(a.time.split(":")[0]) + 1);
-          end.setMinutes(parseInt(a.time.split(":")[1]));
+          const start = new Date(a.dateTime);
+          const end = new Date(a.dateTime);
+          end.setHours(end.getHours() + 1);
 
           return {
             id: a.id,

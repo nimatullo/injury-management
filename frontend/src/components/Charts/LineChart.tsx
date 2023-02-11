@@ -47,7 +47,7 @@ export const LineChart = ({ graphData }) => {
   );
 
   return (
-    <Box height="500px" margin="1em">
+    <Box height="500px" margin="1em" w="100%">
       {graphData && graphData.length > 0 ? (
         <Chart
           options={{

@@ -49,7 +49,7 @@ export const TeamInjurySummary = (props: any) => {
 
       <CardBody>
         <TableContainer>
-          <Table variant="simple">
+          <Table variant="simple" size="sm">
             <Thead>
               <Tr>
                 <Th></Th>

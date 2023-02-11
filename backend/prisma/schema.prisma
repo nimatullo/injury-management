@@ -37,11 +37,10 @@ model Exercise {
 
 model Appointment {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  date         DateTime
+  dateTime     DateTime
   player       Player    @relation(fields: [playerId], references: [id])
   playerId     String    @db.ObjectId
   forTreatment Treatment @relation(fields: [treatmentId], references: [id])
-  time         String
   notes        String?
   treatmentId  String    @db.ObjectId
 }
@@ -59,6 +58,6 @@ model Treatment {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   treatmentName String
   Appointment   Appointment[]
-  Injury        Injury?       @relation(fields: [injuryId], references: [id])
+  injury        Injury?       @relation(fields: [injuryId], references: [id])
   injuryId      String?       @db.ObjectId
 }
