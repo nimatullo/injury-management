@@ -2,27 +2,30 @@ import { Box } from "@chakra-ui/react";
 import * as React from "react";
 import { useParams } from "react-router-dom";
 import ApiService from "../services/ApiService";
-import { ApiResponse } from "../services/types";
+import { ApiResponse, Player } from "../services/types";
 import { InjuryGraphs } from "../components/Injuries/InjuryGraphs";
 import { PlayerDetails } from "../components/Injuries/PlayerInformation";
-import { NewAppointmentButton } from "../components/Injuries/NewAppointmentModal";
 
 export const InjuryReport = () => {
-  const [player, setPlayer] = React.useState<any>(null);
+  const [player, setPlayer] = React.useState<Player | null>(null);
 
   React.useEffect(() => {
+    fetchPlayerInfo();
+  }, []);
+
+  const fetchPlayerInfo = async () => {
     let endpoint = `players/${params.id}`;
-    ApiService.get(endpoint).then((res: ApiResponse) => {
+    ApiService.get(endpoint).then((res: ApiResponse<Player>) => {
       setPlayer(res.data);
     });
-  }, []);
+  };
 
   const params = useParams();
 
   return (
     <Box mt="5" w="90%">
       <div>{player && <PlayerDetails player={player} />}</div>
-      <InjuryGraphs />
+      <InjuryGraphs cb={fetchPlayerInfo} />
     </Box>
   );
 };

@@ -27,15 +27,15 @@ import {
 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
-import { ApiResponse } from "../../services/types";
+import { ApiResponse, Appointments } from "../../services/types";
 
 export const TodayAppointments = () => {
   const [appointments, setAppointments] = React.useState<any>([]);
 
   React.useEffect(() => {
-    const endpoint = "players/appointments/today";
-    ApiService.get(endpoint).then((res: ApiResponse) => {
-      if (res.status === 200) {
+    const endpoint = "appointments/date/today";
+    ApiService.get(endpoint).then((res: ApiResponse<Appointments[]>) => {
+      if (res.status === 200 && res.data.length > 0) {
         setAppointments(res.data.splice(0, 5));
       }
     });
@@ -95,10 +95,11 @@ export const TodayAppointments = () => {
 
       <CardBody>
         <Stack spacing={4}>
-          {appointments.length > 0 &&
+          {appointments.length > 0 ? (
             appointments.map((appointment: any) => {
               return (
                 <Grid
+                  key={appointment.id}
                   templateColumns="repeat(4, 1fr)"
                   alignItems="center"
                   justifyItems="start"
@@ -140,7 +141,12 @@ export const TodayAppointments = () => {
                   </GridItem>
                 </Grid>
               );
-            })}
+            })
+          ) : (
+            <Text color="gray.600" fontSize="md">
+              No appointments today
+            </Text>
+          )}
         </Stack>
       </CardBody>
       <CardFooter>

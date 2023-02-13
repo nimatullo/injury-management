@@ -13,41 +13,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import ApiService from "../../services/ApiService";
-import * as logos from "react-nba-logos";
 import moment from "moment";
-
-const Logos = {
-  ATL: logos.ATL,
-  BOS: logos.BOS,
-  BKN: logos.BKN,
-  CHA: logos.CHA,
-  CHI: logos.CHI,
-  CLE: logos.CLE,
-  DAL: logos.DAL,
-  DEN: logos.DEN,
-  DET: logos.DET,
-  GSW: logos.GSW,
-  HOU: logos.HOU,
-  IND: logos.IND,
-  LAC: logos.LAC,
-  LAL: logos.LAL,
-  MEM: logos.MEM,
-  MIA: logos.MIA,
-  MIL: logos.MIL,
-  MIN: logos.MIN,
-  NOP: logos.NOP,
-  NYK: logos.NYK,
-  OKC: logos.OKC,
-  ORL: logos.ORL,
-  PHI: logos.PHI,
-  PHX: logos.PHX,
-  POR: logos.POR,
-  SAC: logos.SAC,
-  SAS: logos.SAS,
-  TOR: logos.TOR,
-  UTA: logos.UTA,
-  WAS: logos.WAS,
-};
+import { TeamLogo } from "./TeamLogo";
 
 export const UpcomingGame = () => {
   const [upcomingGame, setUpcomingGame] = React.useState<any>(null);
@@ -56,11 +23,6 @@ export const UpcomingGame = () => {
       setUpcomingGame(data);
     });
   }, []);
-
-  const getLogo = (team: string) => {
-    const Logo = Logos[team];
-    return <Logo />;
-  };
 
   const formatDate = (date: string) => {
     return moment(date).format("MM/DD/YYYY");
@@ -80,14 +42,14 @@ export const UpcomingGame = () => {
               <HStack alignItems="flex-end">
                 <Heading size="md">Upcoming Game</Heading>
                 <Text fontSize="sm" color="gray.500">
-                  {moment(upcomingGame.gdte).format("MMM do, YYYY")}
+                  {moment(upcomingGame.gdte).format("MMM Do, YYYY")}
                 </Text>
               </HStack>
             </CardHeader>
             <CardBody>
               <Flex alignItems="center" w="100%" justifyContent="space-evenly">
                 <Stack textAlign="center">
-                  {getLogo(upcomingGame.v.ta)}
+                  <TeamLogo team={upcomingGame.v.ta} />
                   <Heading size="lg">{upcomingGame.v.ta}</Heading>
                 </Stack>
                 <Box textAlign="center">
@@ -99,7 +61,7 @@ export const UpcomingGame = () => {
                   </Text>
                 </Box>
                 <Stack textAlign="center">
-                  {getLogo(upcomingGame.h.ta)}
+                  <TeamLogo team={upcomingGame.h.ta} />
                   <Heading size="lg">{upcomingGame.h.ta}</Heading>
                 </Stack>
               </Flex>

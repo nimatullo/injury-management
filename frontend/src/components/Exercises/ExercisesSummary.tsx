@@ -1,19 +1,20 @@
 import { Heading, Table, Td, Text, Tr } from "@chakra-ui/react";
 import React from "react";
 import ApiService from "../../services/ApiService";
+import { ApiResponse, Exercise } from "../../services/types";
 
 interface ExercisesSummaryProps {
   playerId: string;
 }
 
 export const ExercisesSummary = ({ playerId }: ExercisesSummaryProps) => {
-  const [exercises, setExercises] = React.useState<any>([]);
+  const [exercises, setExercises] = React.useState<Exercise[]>([]);
 
   React.useEffect(() => {
     const endpoint = `players/${playerId}/exercises`;
-    ApiService.get(endpoint).then((res) => {
+    ApiService.get(endpoint).then((res: ApiResponse<Exercise[]>) => {
       if (res.status === 200) {
-        setExercises(res.data.exercises);
+        setExercises(res.data);
       }
     });
   }, []);
@@ -27,7 +28,7 @@ export const ExercisesSummary = ({ playerId }: ExercisesSummaryProps) => {
 
   return exercises.length > 0 ? (
     <>
-      <Heading size="md" my="2">
+      <Heading size="md" mb="2">
         Latest Exercises
       </Heading>
       <Table variant="simple" size="sm" borderColor="transparent">

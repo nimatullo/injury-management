@@ -57,6 +57,32 @@ class InjuryService {
         });
     });
   }
+
+  async getInjuredPlayers() {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .getInjuredPlayers()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async addNewInjuryToPlayer(playerId, injuryName, injuryDate) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .addInjuryToPlayer(playerId, injuryName, injuryDate)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 module.exports = InjuryService;

@@ -2,12 +2,12 @@ import { Flex, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
-import { ApiResponse, PlayerInformation } from "../../services/types";
+import { ApiResponse, Appointments, Player } from "../../services/types";
 import { NewAppointmentButton } from "../Injuries/NewAppointmentModal";
 import { AppointmentsList } from "./AppointmentsList";
 
 interface AppointmentsSummaryProps {
-  player: PlayerInformation;
+  player: Player;
   injuries: any[];
   isExtended?: boolean;
 }
@@ -25,7 +25,6 @@ export const AppointmentsSummary = ({
 
   React.useEffect(() => {
     fetchAppointments();
-    console.log("isExtended", isExtended);
   }, []);
 
   const fetchAppointments = async () => {
@@ -34,7 +33,7 @@ export const AppointmentsSummary = ({
       endpoint += "/all";
     }
 
-    ApiService.get(endpoint).then((res: ApiResponse) => {
+    ApiService.get(endpoint).then((res: ApiResponse<Appointments[]>) => {
       if (res.status === 200) {
         if (isExtended) {
           setUpcomingAppointments({
@@ -70,11 +69,6 @@ export const AppointmentsSummary = ({
           <Text>Loading...</Text>
         )}
       </Flex>
-      <NewAppointmentButton
-        player={player}
-        injuries={injuries}
-        cb={fetchAppointments}
-      />
     </>
   );
 };

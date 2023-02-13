@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const { readFile } = require("fs").promises;
 
 const prisma = new PrismaClient({
-  log: ["query", "info", "warn"],
+  log: ["info", "warn"],
 });
 
 async function main() {

@@ -57,7 +57,7 @@ const AutoSuggestionField: React.FC<AutocompleteProps> = ({
             {option}
           </ListItem>
         ));
-    } else {
+    } else if (typeof options[0] === "object") {
       return (options as ListItems[])
         .filter((option: ListItems) =>
           option.name.toLowerCase().startsWith(inputValue.toLowerCase())

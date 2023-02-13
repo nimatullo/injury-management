@@ -55,11 +55,18 @@ export const NewInjuryModal = ({ isOpen, onClose }: NewInjuryModalProps) => {
       data.injuryDate = injuryDate;
     }
 
-    ApiService.submitInjuryReport(data).then((response) => {
+    const endpoint = `injuries/${selectedPlayerId}`;
+    ApiService.post(endpoint, data).then((response) => {
       if (response.status === 200) {
         onClose();
       }
     });
+
+    // ApiService.submitInjuryReport(data).then((response) => {
+    //   if (response.status === 200) {
+    //     onClose();
+    //   }
+    // });
   };
 
   return (

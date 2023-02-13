@@ -366,6 +366,27 @@ class MongoService {
     });
   }
 
+  async getAppointment(id) {
+    return new Promise((resolve, reject) => {
+      this.db.appointment
+        .findUnique({
+          where: {
+            id: id,
+          },
+          include: {
+            forTreatment: true,
+            player: true,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async getAppointments(dateTime) {
     const date = new Date(dateTime);
     const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -395,6 +416,7 @@ class MongoService {
           resolve(data);
         })
         .catch((err) => {
+          console.log(err);
           reject(err);
         });
     });
@@ -539,7 +561,7 @@ class MongoService {
             exercises: {
               take: 3,
               orderBy: {
-                dateTime: "desc",
+                date: "desc",
               },
             },
           },

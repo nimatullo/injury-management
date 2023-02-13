@@ -20,15 +20,16 @@ import {
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
+import { ApiResponse, Player } from "../../services/types";
 import { NewInjuryButton } from "../NewInjury/NewInjuryButton";
 
 export const TeamInjurySummary = (props: any) => {
-  const [injuredPlayers, setInjuredPlayers] = React.useState<any>([]);
+  const [injuredPlayers, setInjuredPlayers] = React.useState<Player[]>([]);
 
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    ApiService.getInjuredPlayers().then((data: any) => {
+    ApiService.getInjuredPlayers().then((data: Player[]) => {
       setInjuredPlayers(data);
     });
   }, []);

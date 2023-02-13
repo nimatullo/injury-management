@@ -18,6 +18,7 @@ import {
 import React, { ChangeEventHandler } from "react";
 import { BsFillCalendarPlusFill } from "react-icons/bs";
 import ApiService from "../../services/ApiService";
+import { ApiResponse, Injury, Player, Treatment } from "../../services/types";
 import AutoSuggestionField from "../Form/AutoSuggestionField";
 
 interface NewAppointmentModalProps {
@@ -53,23 +54,29 @@ export const NewAppointmentButton = ({ cb }: NewAppointmentButtonProps) => {
   );
 };
 
+interface PlayerInjuries extends Player {
+  injuries: Injury[];
+}
+
 const NewAppointmentModal = ({
   isOpen,
   onClose,
   cb,
 }: NewAppointmentModalProps) => {
-  const [injuredPlayers, setInjuredPlayers] = React.useState<any[]>([]);
-  const [selectedPlayer, setSelectedPlayer] = React.useState<any>("");
-  const [treatments, setTreatments] = React.useState([]);
+  const [injuredPlayers, setInjuredPlayers] = React.useState<PlayerInjuries[]>(
+    []
+  );
+  const [selectedPlayer, setSelectedPlayer] = React.useState<string>("");
+  const [treatments, setTreatments] = React.useState<string[]>([]);
 
-  const [injuries, setInjuries] = React.useState<any[]>([]);
+  const [injuries, setInjuries] = React.useState<Injury[]>([]);
 
   const [selectedInjury, setSelectedInjury] = React.useState("");
   const [selectedTreatment, setSelectedTreatment] = React.useState("");
   const [appointmentDateTime, setAppointmentDateTime] = React.useState("");
 
   React.useEffect(() => {
-    const endpoint = "players/injured";
+    const endpoint = "injuries/players";
     ApiService.get(endpoint).then((res) => {
       setInjuredPlayers(res.data);
     });
@@ -77,9 +84,14 @@ const NewAppointmentModal = ({
 
   const handlePlayerChange = (e: any) => {
     const playerId = e.target.value;
-    setInjuries(
-      injuredPlayers.find((player: any) => player.id === playerId).injuries
+
+    const player = injuredPlayers.find(
+      (player: PlayerInjuries) => player.id === playerId
     );
+
+    if (player) {
+      setInjuries(player.injuries);
+    }
 
     setSelectedPlayer(playerId);
   };
@@ -89,13 +101,15 @@ const NewAppointmentModal = ({
     setSelectedInjury(injuryName);
     const endpoint = `injuries/${injuryName}/treatments`;
 
-    ApiService.get(endpoint).then((res) => {
-      setTreatments(res.data.map((treatment: any) => treatment.treatmentName));
+    ApiService.get(endpoint).then((res: ApiResponse<Treatment[]>) => {
+      setTreatments(
+        res.data.map((treatment: Treatment) => treatment.treatmentName)
+      );
     });
   };
 
   const handleSubmit = () => {
-    const endpoint = `players/${selectedPlayer}/appointments`;
+    const endpoint = `appointments/player/${selectedPlayer}`;
     const data = {
       injuryName: selectedInjury,
       treatment: selectedTreatment,

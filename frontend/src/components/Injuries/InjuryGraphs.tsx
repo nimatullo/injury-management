@@ -4,6 +4,7 @@ import React from "react";
 import ApiService from "../../services/ApiService";
 import { useParams } from "react-router-dom";
 import { NewMeasurementButton } from "./NewMeasurementModal";
+import { ApiResponse, Exercise } from "../../services/types";
 
 const categoryToExcersise: any = {
   Balance: ["Single Leg Balance", "Double Leg Balance"],
@@ -12,12 +13,12 @@ const categoryToExcersise: any = {
   Stability: ["Single Leg Stability", "Double Leg Stability"],
 };
 
-export const InjuryGraphs = () => {
+export const InjuryGraphs = ({ cb }: { cb: () => void }) => {
   const [selectedCategory, setSelectedCategory] = React.useState("Balance");
   const [selectedExcersise, setSelectedExcersise] =
     React.useState("Single Leg Balance");
 
-  const [graphData, setGraphData] = React.useState<any>(null);
+  const [graphData, setGraphData] = React.useState<Exercise[]>([]);
 
   const params = useParams();
 
@@ -27,7 +28,7 @@ export const InjuryGraphs = () => {
 
   const fetchGraphData = async () => {
     const endpoint = `players/${params.id}/measurements/${selectedExcersise}`;
-    ApiService.get(endpoint).then((res: any) => {
+    ApiService.get(endpoint).then((res: ApiResponse<Exercise[]>) => {
       setGraphData(res.data);
     });
   };
@@ -64,7 +65,10 @@ export const InjuryGraphs = () => {
           id={params.id as string}
           category={selectedCategory}
           exercise={selectedExcersise}
-          callback={fetchGraphData}
+          callback={() => {
+            fetchGraphData();
+            cb();
+          }}
         />
       </Flex>
       <Flex

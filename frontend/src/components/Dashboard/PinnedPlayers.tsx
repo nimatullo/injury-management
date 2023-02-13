@@ -15,13 +15,14 @@ import {
 import React from "react";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import ApiService from "../../services/ApiService";
+import { ApiResponse, Player } from "../../services/types";
 
 export const PinnedPlayers = () => {
   const [players, setPlayers] = React.useState<any>([]);
 
   React.useEffect(() => {
     const endpoint = `players/random`;
-    ApiService.get(endpoint).then((res) => {
+    ApiService.get(endpoint).then((res: ApiResponse<Player[]>) => {
       if (res.status === 200) {
         setPlayers(res.data.splice(0, 3));
       }
@@ -48,13 +49,17 @@ export const PinnedPlayers = () => {
 
         <HStack>
           {players.map((player: any) => (
-            <Card>
+            <Card
+              key={player.id}
+              background="#FAFAFC"
+              border="1px solid #E2E8F0"
+            >
               <CardBody>
                 <Image
                   alt={player.name}
                   borderRadius="lg"
                   src={player.playerPhoto}
-                  bg="#FAFAFC"
+                  bg="white"
                   border="1px solid #E2E8F0"
                 />
                 <Stack>

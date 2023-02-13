@@ -37,7 +37,7 @@ model Exercise {
 
 model Appointment {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  dateTime     DateTime
+  dateTime     DateTime?
   player       Player    @relation(fields: [playerId], references: [id])
   playerId     String    @db.ObjectId
   forTreatment Treatment @relation(fields: [treatmentId], references: [id])

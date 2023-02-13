@@ -27,6 +27,7 @@ class PlayerService {
           resolve(data);
         })
         .catch((err) => {
+          console.log(err);
           reject(err);
         });
     });
@@ -36,32 +37,6 @@ class PlayerService {
     return new Promise((resolve, reject) => {
       this.mongoService
         .add(this.collection, player)
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
-  async addNewInjuryToPlayer(playerId, injuryName, injuryDate) {
-    return new Promise((resolve, reject) => {
-      this.mongoService
-        .addInjuryToPlayer(playerId, injuryName, injuryDate)
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
-  async getInjuredPlayers() {
-    return new Promise((resolve, reject) => {
-      this.mongoService
-        .getInjuredPlayers()
         .then((data) => {
           resolve(data);
         })
@@ -123,32 +98,6 @@ class PlayerService {
     });
   }
 
-  async createAppointment(playerId, dateTime, treatment, forInjury) {
-    return new Promise((resolve, reject) => {
-      this.mongoService
-        .createAppointment(playerId, dateTime, treatment, forInjury)
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
-  async getAllAppointments(playerId) {
-    return new Promise((resolve, reject) => {
-      this.mongoService
-        .getUpcomingAppointments(playerId)
-        .then((data) => {
-          resolve(data?.upcomingAppointments);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
   async getFirstThreeAppointments(playerId) {
     const totalAppointments = await this.getAllAppointments(playerId);
 
@@ -160,19 +109,6 @@ class PlayerService {
             appointments: data?.upcomingAppointments,
             total: totalAppointments.length,
           });
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
-  async updateAppointment(appointmentId, dateTime, notes) {
-    return new Promise((resolve, reject) => {
-      this.mongoService
-        .updateAppointment(appointmentId, dateTime, notes)
-        .then((data) => {
-          resolve(data);
         })
         .catch((err) => {
           reject(err);
@@ -193,25 +129,12 @@ class PlayerService {
     });
   }
 
-  async getTodayAppointments() {
-    return new Promise((resolve, reject) => {
-      this.mongoService
-        .getTodayAppointments()
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
-
   async getThreeMostRecentExercises(playerId) {
     return new Promise((resolve, reject) => {
       this.mongoService
         .getThreeMostRecentExercises(playerId)
         .then((data) => {
-          resolve(data);
+          resolve(data.exercises);
         })
         .catch((err) => {
           reject(err);

@@ -1,5 +1,5 @@
-export interface ApiResponse {
-  data: any;
+export interface ApiResponse<T> {
+  data: T | any;
   status: number;
 }
 
@@ -14,12 +14,49 @@ export interface ListItems {
   name: string;
 }
 
-export interface PlayerInformation {
+export interface Player {
   id: string;
+  name: string;
+  position: string;
+  number: number;
+  realId: number;
   height: string;
   weight: string;
-  number: string;
-  position: string;
-  name: string;
   playerPhoto: string;
+}
+
+export interface Appointments {
+  id: string;
+  dateTime: string;
+  player: Player;
+  playerId: string;
+  forTreatment: Treatment;
+  treatmentId: string;
+  notes: string;
+}
+
+export interface Treatment {
+  id: string;
+  treatmentName: string;
+  Appointment: Appointments[];
+  injury: Injury;
+  injuryId: string;
+}
+
+export interface Injury {
+  id: string;
+  injuryName: string;
+  injuryDate: string;
+  player: Player;
+  playerId: string[];
+  Treatment: Treatment[];
+}
+
+export interface Exercise {
+  id: string;
+  name: string;
+  measurement: string;
+  date: string;
+  category: string;
+  playerId: string;
 }

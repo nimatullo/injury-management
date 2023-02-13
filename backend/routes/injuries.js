@@ -15,14 +15,9 @@ router.get("/", async (req, res) => {
     });
 });
 
-router.post("/", async (req, res) => {
-  const injury = req.body;
-  if (!injury) {
-    res.status(400).json({ message: "Injury is required" });
-    return;
-  }
+router.get("/players", async (req, res) => {
   service
-    .addInjury(injury)
+    .getInjuredPlayers()
     .then((data) => {
       res.json(data);
     })
@@ -46,6 +41,22 @@ router.get("/:playerId", async (req, res) => {
     })
     .catch((err) => {
       res.status(500).json(err);
+    });
+});
+
+router.post("/:playerId", async (req, res) => {
+  const { playerId, injuryName, injuryDate } = req.body;
+  if (!playerId || !injuryName) {
+    res.status(400).json({ message: "PlayerId and InjuryName are required" });
+    return;
+  }
+  service
+    .addNewInjuryToPlayer(playerId, injuryName, injuryDate)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err.message);
     });
 });
 

@@ -6,6 +6,7 @@ import timelineTheme from "../assets/timelineTheme";
 import { Center, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import { PlayerTimelineItem } from "../components/Appointments/PlayerTimelineItem";
 import { CalendarView } from "../components/Appointments/CalendarView";
+import { AppointmentTimelineItem } from "../components/Appointments/AppointmentTimelineItem";
 
 export const AllAppointments = () => {
   const [players, setPlayers] = React.useState<Channel[]>([]);
@@ -13,12 +14,21 @@ export const AllAppointments = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [date, setDate] = React.useState(new Date());
 
+  const [start, setStart] = React.useState(new Date());
+  const [end, setEnd] = React.useState(new Date());
+
+  React.useEffect(() => {
+    setStart(moment(date).startOf("day").toDate());
+    setEnd(moment(date).endOf("day").toDate());
+    handleFetchResources();
+  }, []);
+
   const handleFetchResources = async () => {
     setIsLoading(true);
     const formattedDate = new Date(date);
     const apps = await ApiService.getAppointments(formattedDate.toISOString());
     const players = apps
-      .reduce((acc: any, appointment: any) => {
+      .reduce((acc: Channel[], appointment: Channel) => {
         if (
           !acc.find(
             (channel: any) => channel.channelUuid === appointment.channelUuid
@@ -32,17 +42,11 @@ export const AllAppointments = () => {
         return appointment.channel;
       });
 
+    console.log(apps, players);
+
     setAppointments(apps as Program[]);
     setPlayers(players as Channel[]);
     setIsLoading(false);
-  };
-
-  const getBeginningOfDay = (date: Date) => {
-    return moment(date).startOf("day").toDate();
-  };
-
-  const getEndOfDay = (date: Date) => {
-    return moment(date).endOf("day").toDate();
   };
 
   const { getEpgProps, getLayoutProps } = useEpg({
@@ -52,14 +56,16 @@ export const AllAppointments = () => {
     itemHeight: 100,
     isSidebar: true,
     isTimeline: true,
-    startDate: getBeginningOfDay(date),
-    endDate: getEndOfDay(date),
+    startDate: start,
+    endDate: end,
     isBaseTimeFormat: true,
     theme: timelineTheme,
   });
 
   React.useEffect(() => {
     handleFetchResources();
+    setStart(moment(date).startOf("day").toDate());
+    setEnd(moment(date).endOf("day").toDate());
   }, [date]);
 
   return (
@@ -71,6 +77,13 @@ export const AllAppointments = () => {
               {...getLayoutProps()}
               renderChannel={({ channel }) => (
                 <PlayerTimelineItem key={channel.uuid} channel={channel} />
+              )}
+              renderProgram={({ program, ...rest }) => (
+                <AppointmentTimelineItem
+                  key={program.data.id}
+                  program={program}
+                  {...rest}
+                />
               )}
             />
           </Epg>

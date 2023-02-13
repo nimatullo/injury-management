@@ -17,12 +17,12 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
-import { PlayerInformation } from "../../services/types";
+import { ApiResponse, Injury, Player } from "../../services/types";
 import { AppointmentsSummary } from "../Appointments/AppointmentsSummary";
 import { ExercisesSummary } from "../Exercises/ExercisesSummary";
 
 export interface PlayerInformationProps {
-  player: PlayerInformation;
+  player: Player;
 }
 
 const recoveredInjuries = ["Ankle", "Back", "Calf"];
@@ -31,9 +31,11 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
   const [currentInjuries, setCurrentInjuries] = React.useState<any>([]);
 
   React.useEffect(() => {
-    ApiService.getInjuriesForPlayer(player.id).then((data: any) => {
-      setCurrentInjuries(data);
-    });
+    ApiService.getInjuriesForPlayer(player.id).then(
+      (data: ApiResponse<Injury[]>) => {
+        setCurrentInjuries(data);
+      }
+    );
   }, []);
 
   const daysAgo = (date: string) => {
@@ -43,8 +45,6 @@ export const PlayerDetails = ({ player }: PlayerInformationProps) => {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
   };
-
-  const navigate = useNavigate();
 
   return (
     <Center p="5" borderBottomWidth={"1px"} borderBottomColor="gray.200">

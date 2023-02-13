@@ -1,28 +1,32 @@
 import {
   Box,
-  CardBody,
-  CardHeader,
   Divider,
   Heading,
-  HStack,
   Text,
-  VStack,
-  Card,
-  Grid,
   ListItem,
   UnorderedList,
-  Center,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import Calendar from "react-calendar";
 import "../../assets/Calendar.css";
 import ApiService from "../../services/ApiService";
-import { ApiResponse } from "../../services/types";
+import { ApiResponse, Appointments } from "../../services/types";
 import { NewAppointmentButton } from "../Injuries/NewAppointmentModal";
 
-export const CalendarView = ({ date, setDate }) => {
-  const [allAppointments, setAllAppointments] = React.useState<any[]>([]);
+interface CalendarViewProps {
+  date: Date;
+  setDate: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+interface GroupedAppointments {
+  [date: string]: Appointments[];
+}
+
+export const CalendarView = ({ date, setDate }: CalendarViewProps) => {
+  const [allAppointments, setAllAppointments] = React.useState<
+    GroupedAppointments[]
+  >([]);
 
   React.useEffect(() => {
     handleFetchAppointments();
@@ -30,7 +34,7 @@ export const CalendarView = ({ date, setDate }) => {
 
   const handleFetchAppointments = async () => {
     const endpoint = "appointments";
-    ApiService.get(endpoint).then((res: ApiResponse) => {
+    ApiService.get(endpoint).then((res: ApiResponse<GroupedAppointments[]>) => {
       setAllAppointments(res.data);
     });
   };
@@ -48,16 +52,16 @@ export const CalendarView = ({ date, setDate }) => {
 
   return (
     <Box p="1em">
-      <Calendar onChange={setDate} value={date} />
+      <Calendar locale="en-US" onChange={setDate} value={date} />
       <NewAppointmentButton cb={handleFetchAppointments} />
       <Box overflowY="auto">
         {allAppointments &&
-          Object.keys(allAppointments).map((date: string) => (
+          Object.keys(allAppointments).map((date) => (
             <Box>
               <Heading size="sm">{formatDate(date)}</Heading>
               <Divider />
               <UnorderedList p="2" spacing="1">
-                {allAppointments[date].map((appointment: any) => (
+                {allAppointments[date].map((appointment: Appointments) => (
                   <ListItem>
                     <Text color="gray.900">{appointment.player.name}</Text>
                     <Text fontSize="sm" color="gray.500">

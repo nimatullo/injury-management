@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import ApiService from "../../services/ApiService";
-import { ApiResponse } from "../../services/types";
+import { ApiResponse, Player } from "../../services/types";
 import { messages } from "./messages";
 
 export const ChatDemo = () => {
@@ -19,7 +19,7 @@ export const ChatDemo = () => {
 
   React.useEffect(() => {
     const endpoint = `players/random`;
-    ApiService.get(endpoint).then((res: ApiResponse) => {
+    ApiService.get(endpoint).then((res: ApiResponse<Player[]>) => {
       if (res.status === 200) {
         setPlayers(res.data);
       }
@@ -43,6 +43,7 @@ export const ChatDemo = () => {
           players.map((player: any) => {
             return (
               <HStack
+                key={player.id}
                 w="100%"
                 borderBottomWidth="1px"
                 borderColor="gray.200"

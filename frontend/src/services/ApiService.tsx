@@ -1,5 +1,5 @@
 import moment from "moment";
-import { ApiResponse, ApiOptions, ListItems } from "./types";
+import { ApiResponse, ApiOptions, ListItems, Appointments } from "./types";
 
 const API_URL = "http://localhost:8000/";
 
@@ -8,7 +8,7 @@ class ApiService {
     path: string,
     method: string,
     body?: any
-  ): Promise<ApiResponse> {
+  ): Promise<ApiResponse<any>> {
     try {
       const options: ApiOptions = {
         headers: { "Content-Type": "application/json" },
@@ -25,19 +25,19 @@ class ApiService {
     }
   }
 
-  public static async get(path: string): Promise<ApiResponse> {
+  public static async get(path: string): Promise<ApiResponse<any>> {
     return this.fetchData(path, "GET");
   }
 
-  public static async post(path: string, body: any): Promise<ApiResponse> {
+  public static async post(path: string, body: any): Promise<ApiResponse<any>> {
     return this.fetchData(path, "POST", body);
   }
 
-  public static async put(path: string, body: any): Promise<ApiResponse> {
+  public static async put(path: string, body: any): Promise<ApiResponse<any>> {
     return this.fetchData(path, "PUT", body);
   }
 
-  public static async delete(path: string): Promise<ApiResponse> {
+  public static async delete(path: string): Promise<ApiResponse<any>> {
     return this.fetchData(path, "DELETE");
   }
 
@@ -64,12 +64,12 @@ class ApiService {
 
   public static async submitInjuryReport(
     injuryReport: any
-  ): Promise<ApiResponse> {
+  ): Promise<ApiResponse<any>> {
     return this.post("players/add-injury", injuryReport);
   }
 
   public static async getInjuredPlayers(): Promise<any> {
-    return this.get("players/injured").then((response) => {
+    return this.get("injuries/players").then((response) => {
       if (response.status === 200) {
         return response.data;
       }
@@ -140,28 +140,31 @@ class ApiService {
   }
 
   public static async getAppointments(date: string) {
-    return this.get(`appointments/${date}`).then((res: ApiResponse) => {
-      if (res.status === 200) {
-        return res.data.map((a: any, index: number) => {
-          const start = new Date(a.dateTime);
-          const end = new Date(a.dateTime);
-          end.setHours(end.getHours() + 1);
+    return this.get(`appointments/date/${date}`).then(
+      (res: ApiResponse<Appointments[]>) => {
+        if (res.status === 200) {
+          return res.data.map((a: any, index: number) => {
+            const start = new Date(a.dateTime);
+            const end = new Date(a.dateTime);
+            end.setHours(end.getHours() + 1);
 
-          return {
-            id: a.id,
-            title: a.forTreatment.treatmentName,
-            since: start.toISOString(),
-            till: end.toISOString(),
-            channelUuid: a.playerId,
-            channel: {
-              uuid: a.playerId,
-              logo: a.player.playerPhoto,
-              title: a.player.name,
-            },
-          };
-        });
+            return {
+              id: a.id,
+              title: a.forTreatment.treatmentName,
+              since: start.toISOString(),
+              till: end.toISOString(),
+              notes: a.notes,
+              channelUuid: a.playerId,
+              channel: {
+                uuid: a.playerId,
+                logo: a.player.playerPhoto,
+                title: a.player.name,
+              },
+            };
+          });
+        }
       }
-    });
+    );
   }
 }
 
