@@ -5,6 +5,7 @@
     "express": "^4.18.2",
     "moment": "^2.29.4",
     "morgan": "^1.10.0",
+    "nba-api-client": "^1.1.2",
     "prisma": "^4.9.0"
   }
 }

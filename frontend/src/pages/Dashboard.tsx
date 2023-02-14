@@ -23,18 +23,18 @@ export const Dashboard = () => {
     <>
       <Grid
         templateColumns="repeat(4, 1fr)"
-        templateRows="repeat(6, 1fr)"
+        templateRows="repeat(8, 1fr)"
         gap={4}
         h="100vh"
         p="1em"
       >
-        <GridItem rowSpan={3} colSpan={2}>
+        <GridItem rowSpan={5} colSpan={2}>
           <PinnedPlayers />
         </GridItem>
-        <GridItem rowSpan={5}>
+        <GridItem rowSpan={7}>
           <TodayAppointments />
         </GridItem>
-        <GridItem rowSpan={5}>
+        <GridItem rowSpan={7}>
           <ChatDemo />
         </GridItem>
         <GridItem rowSpan={3} colSpan={2}>

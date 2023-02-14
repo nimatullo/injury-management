@@ -74,6 +74,23 @@ class MongoService {
     });
   }
 
+  async getPlayerByName(name) {
+    return new Promise((resolve, reject) => {
+      this.db.player
+        .findFirst({
+          where: {
+            name: name,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async addInjuryToPlayer(playerId, injuryName, injuryDate) {
     if (!injuryDate) {
       injuryDate = new Date();

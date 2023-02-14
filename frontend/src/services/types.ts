@@ -60,3 +60,13 @@ export interface Exercise {
   category: string;
   playerId: string;
 }
+
+export interface RecoveryTracking {
+  player: {
+    name: string;
+    photo: string;
+  };
+  beforeAvg: number;
+  afterAvg: number;
+  recoveryPercentage: number;
+}

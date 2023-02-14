@@ -14,11 +14,13 @@ app.use(morgan("dev"));
 const players = require("./routes/players");
 const injuries = require("./routes/injuries");
 const appointments = require("./routes/appointments");
+const recovery = require("./routes/recovery");
 
 // Initialize routes
 app.use("/players", players);
 app.use("/injuries", injuries);
 app.use("/appointments", appointments);
+app.use("/recovery", recovery);
 
 const server = app.listen(PORT, () => {
   console.log("Server started on port " + PORT);
