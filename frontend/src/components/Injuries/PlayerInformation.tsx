@@ -18,7 +18,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import { ApiResponse, Injury, Player } from "../../services/types";
-import { AppointmentsSummary } from "../Appointments/AppointmentsSummary";
 import { ExercisesSummary } from "../Exercises/ExercisesSummary";
 
 export interface PlayerInformationProps {

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { RangeChart } from "../components/Charts/RangeChart";
 import { PlayerDetails } from "../components/Injuries/PlayerInformation";
 import ApiService from "../services/ApiService";
-import { ApiResponse } from "../services/types";
+import { ApiResponse, Player } from "../services/types";
 
 export const Appointments = () => {
   const [player, setPlayer] = React.useState<any>(null);
@@ -13,7 +13,7 @@ export const Appointments = () => {
 
   React.useEffect(() => {
     const endpoint = `players/${params.id}`;
-    ApiService.get(endpoint).then((res: ApiResponse) => {
+    ApiService.get(endpoint).then((res: ApiResponse<Player>) => {
       setPlayer(res.data);
     });
   }, []);
@@ -21,7 +21,7 @@ export const Appointments = () => {
   return (
     player && (
       <>
-        <PlayerDetails player={player} displayExercises />
+        <PlayerDetails player={player} />
 
         <RangeChart playerId={player.id} />
       </>

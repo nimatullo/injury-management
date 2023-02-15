@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Input, List, ListItem } from "@chakra-ui/react";
-import { ListItems } from "../../services/ApiService";
+import { ListItems } from "../../services/types";
 
 interface AutocompleteProps {
   options: ListItems[] | string[];

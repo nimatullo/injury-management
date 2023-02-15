@@ -29,9 +29,8 @@ export const CalendarView = ({
   setDate,
   timelineFetchCallback,
 }: CalendarViewProps) => {
-  const [allAppointments, setAllAppointments] = React.useState<
-    GroupedAppointments[]
-  >([]);
+  const [allAppointments, setAllAppointments] =
+    React.useState<GroupedAppointments>({});
 
   React.useEffect(() => {
     handleFetchAppointments();
@@ -39,7 +38,7 @@ export const CalendarView = ({
 
   const handleFetchAppointments = async () => {
     const endpoint = "appointments";
-    ApiService.get(endpoint).then((res: ApiResponse<GroupedAppointments[]>) => {
+    ApiService.get(endpoint).then((res: ApiResponse<GroupedAppointments>) => {
       setAllAppointments(res.data);
       timelineFetchCallback();
     });

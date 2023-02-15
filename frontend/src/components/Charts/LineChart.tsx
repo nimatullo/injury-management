@@ -1,6 +1,7 @@
 import { Box, Center, Text } from "@chakra-ui/react";
 import React from "react";
 import { Chart, AxisOptions } from "react-charts";
+import { Exercise } from "../../services/types";
 
 type RangeOfMotionData = {
   measurement: number;
@@ -13,9 +14,11 @@ type RangeOfMotionSeries = {
   color: string;
 };
 
-const formatData = (graphData) => {
-  // Create range of motion series with 30 days of data for just shoulder
+interface LineChartProps {
+  graphData: Exercise[];
+}
 
+const formatData = (graphData: RangeOfMotionData[]) => {
   const rangeOfMotionData: RangeOfMotionSeries[] = [
     {
       label: "Measurements",
@@ -27,7 +30,7 @@ const formatData = (graphData) => {
   return rangeOfMotionData;
 };
 
-export const LineChart = ({ graphData }) => {
+export const LineChart = ({ graphData }: LineChartProps) => {
   const primaryAxis = React.useMemo(
     (): AxisOptions<RangeOfMotionData> => ({
       getValue: (datum) => new Date(datum.date),
@@ -51,7 +54,7 @@ export const LineChart = ({ graphData }) => {
       {graphData && graphData.length > 0 ? (
         <Chart
           options={{
-            data: formatData(graphData),
+            data: formatData(graphData as any),
             primaryAxis,
             secondaryAxes,
             interactionMode: "closest",
