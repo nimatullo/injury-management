@@ -3,8 +3,8 @@ import { ApiResponse, ApiOptions, ListItems, Appointments } from "./types";
 
 const API_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:8000"
-    : "https://injury-management.onrender.com";
+    ? "http://localhost:8000/"
+    : "https://injury-management.onrender.com/";
 
 class ApiService {
   private static async fetchData(
