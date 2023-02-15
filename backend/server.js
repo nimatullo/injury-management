@@ -17,6 +17,11 @@ const appointments = require("./routes/appointments");
 const recovery = require("./routes/recovery");
 
 // Initialize routes
+
+app.use("/health", (req, res) => {
+  res.send("Server is up and running");
+});
+
 app.use("/players", players);
 app.use("/injuries", injuries);
 app.use("/appointments", appointments);
