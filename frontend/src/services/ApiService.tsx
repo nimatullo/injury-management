@@ -1,7 +1,10 @@
 import moment from "moment";
 import { ApiResponse, ApiOptions, ListItems, Appointments } from "./types";
 
-const API_URL = "https://injury-management.onrender.com/";
+const API_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8000"
+    : "https://injury-management.onrender.com";
 
 class ApiService {
   private static async fetchData(
@@ -117,7 +120,7 @@ class ApiService {
   }
 
   public static async getPinnedPlayers(): Promise<any> {
-    const timeout = 8000;
+    const timeout = 15000;
     const endpoint = API_URL + `recovery`;
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
