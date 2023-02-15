@@ -26,6 +26,10 @@ export const InjuryGraphs = ({ cb }: { cb: () => void }) => {
     fetchGraphData();
   }, [selectedExcersise]);
 
+  React.useEffect(() => {
+    fetchGraphData();
+  }, [params]);
+
   const fetchGraphData = async () => {
     const endpoint = `players/${params.id}/measurements/${selectedExcersise}`;
     ApiService.get(endpoint).then((res: ApiResponse<Exercise[]>) => {

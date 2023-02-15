@@ -1,5 +1,6 @@
 import { Heading, Table, Td, Text, Tr } from "@chakra-ui/react";
 import React from "react";
+import { useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import { ApiResponse, Exercise } from "../../services/types";
 
@@ -9,15 +10,24 @@ interface ExercisesSummaryProps {
 
 export const ExercisesSummary = ({ playerId }: ExercisesSummaryProps) => {
   const [exercises, setExercises] = React.useState<Exercise[]>([]);
+  const params = useParams();
 
   React.useEffect(() => {
+    handleFetchResources();
+  }, []);
+
+  React.useEffect(() => {
+    handleFetchResources();
+  }, [params]);
+
+  const handleFetchResources = async () => {
     const endpoint = `players/${playerId}/exercises`;
     ApiService.get(endpoint).then((res: ApiResponse<Exercise[]>) => {
       if (res.status === 200) {
         setExercises(res.data);
       }
     });
-  }, []);
+  };
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString("en-US", {

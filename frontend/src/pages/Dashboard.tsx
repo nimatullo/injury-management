@@ -1,18 +1,6 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CircularProgress,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  Text,
-} from "@chakra-ui/react";
-import * as React from "react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import { ChatDemo } from "../components/Dashboard/ChatDemo";
 import { PinnedPlayers } from "../components/Dashboard/PinnedPlayers";
-import Sidebar from "../components/Dashboard/Sidebar";
 import { TodayAppointments } from "../components/Dashboard/TodayAppointments";
 import { UpcomingGame } from "../components/Dashboard/UpcomingGame";
 
@@ -27,6 +15,7 @@ export const Dashboard = () => {
         gap={4}
         h="100vh"
         p="1em"
+        w="100%"
       >
         <GridItem rowSpan={5} colSpan={2}>
           <PinnedPlayers />

@@ -17,13 +17,18 @@ import { NewAppointmentButton } from "../Injuries/NewAppointmentModal";
 interface CalendarViewProps {
   date: Date;
   setDate: React.Dispatch<React.SetStateAction<Date>>;
+  timelineFetchCallback: () => void;
 }
 
 interface GroupedAppointments {
   [date: string]: Appointments[];
 }
 
-export const CalendarView = ({ date, setDate }: CalendarViewProps) => {
+export const CalendarView = ({
+  date,
+  setDate,
+  timelineFetchCallback,
+}: CalendarViewProps) => {
   const [allAppointments, setAllAppointments] = React.useState<
     GroupedAppointments[]
   >([]);
@@ -36,6 +41,7 @@ export const CalendarView = ({ date, setDate }: CalendarViewProps) => {
     const endpoint = "appointments";
     ApiService.get(endpoint).then((res: ApiResponse<GroupedAppointments[]>) => {
       setAllAppointments(res.data);
+      timelineFetchCallback();
     });
   };
 

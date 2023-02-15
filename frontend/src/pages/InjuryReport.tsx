@@ -7,11 +7,16 @@ import { InjuryGraphs } from "../components/Injuries/InjuryGraphs";
 import { PlayerDetails } from "../components/Injuries/PlayerInformation";
 
 export const InjuryReport = () => {
+  const params = useParams();
   const [player, setPlayer] = React.useState<Player | null>(null);
 
   React.useEffect(() => {
     fetchPlayerInfo();
   }, []);
+
+  React.useEffect(() => {
+    fetchPlayerInfo();
+  }, [params]);
 
   const fetchPlayerInfo = async () => {
     let endpoint = `players/${params.id}`;
@@ -19,8 +24,6 @@ export const InjuryReport = () => {
       setPlayer(res.data);
     });
   };
-
-  const params = useParams();
 
   return (
     <Box mt="5" w="90%">

@@ -15,10 +15,12 @@ import * as React from "react";
 import AutoSuggestionField from "../Form/AutoSuggestionField";
 import ApiService from "../../services/ApiService";
 import { ListItems } from "../../services/types";
+import { DateInput } from "../Form/DateInput";
 
 interface NewInjuryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  callback: () => void;
 }
 
 interface InjuryReport {
@@ -27,13 +29,17 @@ interface InjuryReport {
   injuryDate?: string;
 }
 
-export const NewInjuryModal = ({ isOpen, onClose }: NewInjuryModalProps) => {
+export const NewInjuryModal = ({
+  isOpen,
+  onClose,
+  callback,
+}: NewInjuryModalProps) => {
   const [players, setPlayers] = React.useState<ListItems[]>([]);
   const [injuries, setInjuries] = React.useState<string[]>([]);
 
   const [selectedPlayerId, setPlayer] = React.useState<string>("");
   const [injury, setInjury] = React.useState<string>("");
-  const [injuryDate, setInjuryDate] = React.useState<string>("");
+  const [injuryDate, setInjuryDate] = React.useState<Date>(new Date());
 
   React.useEffect(() => {
     ApiService.getPlayers().then((response) => {
@@ -52,21 +58,16 @@ export const NewInjuryModal = ({ isOpen, onClose }: NewInjuryModalProps) => {
     };
 
     if (injuryDate) {
-      data.injuryDate = injuryDate;
+      data.injuryDate = injuryDate.toISOString();
     }
 
     const endpoint = `injuries/${selectedPlayerId}`;
     ApiService.post(endpoint, data).then((response) => {
       if (response.status === 200) {
+        callback();
         onClose();
       }
     });
-
-    // ApiService.submitInjuryReport(data).then((response) => {
-    //   if (response.status === 200) {
-    //     onClose();
-    //   }
-    // });
   };
 
   return (
@@ -92,13 +93,17 @@ export const NewInjuryModal = ({ isOpen, onClose }: NewInjuryModalProps) => {
             />
           </FormControl>
 
-          <FormControl my="2">
+          <FormControl my="2" zIndex={50}>
             <FormLabel>Injury date</FormLabel>
-            <Input
+            <DateInput
+              onChange={(date) => setInjuryDate(date)}
+              value={injuryDate}
+            />
+            {/* <Input
               placeholder="Select injury date"
               type="date"
               onChange={(e) => setInjuryDate(e.target.value)}
-            />
+            /> */}
           </FormControl>
         </ModalBody>
         <ModalFooter>

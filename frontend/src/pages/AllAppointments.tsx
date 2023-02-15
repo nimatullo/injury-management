@@ -14,12 +14,7 @@ export const AllAppointments = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [date, setDate] = React.useState(new Date());
 
-  const [start, setStart] = React.useState(new Date());
-  const [end, setEnd] = React.useState(new Date());
-
   React.useEffect(() => {
-    setStart(moment(date).startOf("day").toDate());
-    setEnd(moment(date).endOf("day").toDate());
     handleFetchResources();
   }, []);
 
@@ -42,8 +37,6 @@ export const AllAppointments = () => {
         return appointment.channel;
       });
 
-    console.log(apps, players);
-
     setAppointments(apps as Program[]);
     setPlayers(players as Channel[]);
     setIsLoading(false);
@@ -56,16 +49,14 @@ export const AllAppointments = () => {
     itemHeight: 100,
     isSidebar: true,
     isTimeline: true,
-    startDate: start,
-    endDate: end,
+    startDate: moment(date).startOf("day").toDate(),
+    endDate: moment(date).endOf("day").toDate(),
     isBaseTimeFormat: true,
     theme: timelineTheme,
   });
 
   React.useEffect(() => {
     handleFetchResources();
-    setStart(moment(date).startOf("day").toDate());
-    setEnd(moment(date).endOf("day").toDate());
   }, [date]);
 
   return (
@@ -102,7 +93,11 @@ export const AllAppointments = () => {
         )}
       </GridItem>
       <GridItem w="20vw">
-        <CalendarView date={date} setDate={setDate} />
+        <CalendarView
+          timelineFetchCallback={handleFetchResources}
+          date={date}
+          setDate={setDate}
+        />
       </GridItem>
     </Grid>
   );

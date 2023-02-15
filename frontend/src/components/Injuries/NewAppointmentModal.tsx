@@ -5,6 +5,8 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,8 +20,15 @@ import {
 import React, { ChangeEventHandler } from "react";
 import { BsFillCalendarPlusFill } from "react-icons/bs";
 import ApiService from "../../services/ApiService";
-import { ApiResponse, Injury, Player, Treatment } from "../../services/types";
+import {
+  ApiResponse,
+  Injury,
+  Player,
+  PlayerInjuries,
+  Treatment,
+} from "../../services/types";
 import AutoSuggestionField from "../Form/AutoSuggestionField";
+import { DateInput } from "../Form/DateInput";
 
 interface NewAppointmentModalProps {
   isOpen: boolean;
@@ -54,10 +63,6 @@ export const NewAppointmentButton = ({ cb }: NewAppointmentButtonProps) => {
   );
 };
 
-interface PlayerInjuries extends Player {
-  injuries: Injury[];
-}
-
 const NewAppointmentModal = ({
   isOpen,
   onClose,
@@ -73,7 +78,9 @@ const NewAppointmentModal = ({
 
   const [selectedInjury, setSelectedInjury] = React.useState("");
   const [selectedTreatment, setSelectedTreatment] = React.useState("");
-  const [appointmentDateTime, setAppointmentDateTime] = React.useState("");
+  const [appointmentDateTime, setAppointmentDateTime] = React.useState(
+    new Date()
+  );
 
   React.useEffect(() => {
     const endpoint = "injuries/players";
@@ -113,7 +120,7 @@ const NewAppointmentModal = ({
     const data = {
       injuryName: selectedInjury,
       treatment: selectedTreatment,
-      dateTime: appointmentDateTime,
+      dateTime: appointmentDateTime.toISOString(),
     };
 
     ApiService.post(endpoint, data).then((res) => {
@@ -122,10 +129,6 @@ const NewAppointmentModal = ({
         cb();
       }
     });
-  };
-
-  const handleDateTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setAppointmentDateTime(e.target.value);
   };
 
   return (
@@ -168,14 +171,12 @@ const NewAppointmentModal = ({
             </Select>
           </FormControl>
 
-          <FormControl my="2">
+          <FormControl my="2" zIndex={50}>
             <FormLabel>Appointment Date & Time</FormLabel>
-            <Input
-              placeholder="Enter appointment date and time"
-              type="datetime-local"
+            <DateInput
+              onChange={(date) => setAppointmentDateTime(date)}
               value={appointmentDateTime}
-              onChange={handleDateTimeChange}
-              onInput={handleDateTimeChange}
+              showTimeSelect
             />
           </FormControl>
 

@@ -116,11 +116,33 @@ class ApiService {
     );
   }
 
+  public static async getPinnedPlayers(): Promise<any> {
+    const timeout = 8000;
+    const endpoint = API_URL + `recovery`;
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const response = await fetch(endpoint, {
+        signal: controller.signal,
+      });
+      clearTimeout(id);
+
+      const data = await response.json();
+      return { data, status: response.status };
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        return { data: "Timeout", status: 408 };
+      }
+    }
+  }
+
   public static async getUpcomingGame(): Promise<any> {
     const endpoint =
       "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2022/league/00_full_schedule.json";
 
     const todayDate = new Date();
+    todayDate.setHours(0, 0, 0, 0);
     return fetch(endpoint)
       .then((response) => response.json())
       .then((data) => {

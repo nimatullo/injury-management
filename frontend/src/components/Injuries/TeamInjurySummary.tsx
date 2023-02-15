@@ -5,8 +5,6 @@ import {
   CardHeader,
   Heading,
   HStack,
-  Image,
-  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -29,10 +27,14 @@ export const TeamInjurySummary = (props: any) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
+    handleFetchResources();
+  }, []);
+
+  const handleFetchResources = async () => {
     ApiService.getInjuredPlayers().then((data: Player[]) => {
       setInjuredPlayers(data);
     });
-  }, []);
+  };
 
   return (
     <Card
@@ -40,11 +42,12 @@ export const TeamInjurySummary = (props: any) => {
       borderColor="gray.100"
       h="100%"
       backgroundColor="#FAFAFC"
+      overflowY="auto"
     >
       <CardHeader>
         <HStack justifyContent="space-between" alignItems="center" w="100%">
           <Heading size="md">Injury Report</Heading>
-          <NewInjuryButton />
+          <NewInjuryButton callback={handleFetchResources} />
         </HStack>
       </CardHeader>
 

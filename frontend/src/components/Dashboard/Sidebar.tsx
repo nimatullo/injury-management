@@ -6,8 +6,21 @@ import { BsFillCalendar3WeekFill } from "react-icons/bs";
 import { MdPersonalInjury } from "react-icons/md";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { InjuredPlayerPopover } from "../Injuries/InjuredPlayerPopover";
+import { Player, PlayerInjuries } from "../../services/types";
+import ApiService from "../../services/ApiService";
 
 const Sidebar: React.FC = () => {
+  const [injuredPlayers, setInjuredPlayers] = React.useState<PlayerInjuries[]>(
+    []
+  );
+
+  React.useEffect(() => {
+    ApiService.getInjuredPlayers().then((players) => {
+      setInjuredPlayers(players);
+    });
+  }, []);
+
   const location = useLocation();
   const home = location.pathname === "/";
   const appointments = location.pathname === "/appointments";
@@ -83,28 +96,7 @@ const Sidebar: React.FC = () => {
             onClick={handleClick}
           />
         </Tooltip>
-        <Tooltip
-          label="Report Injury"
-          aria-label="Report Injury"
-          placement="right"
-          bg="black"
-        >
-          <IconButton
-            icon={<MdPersonalInjury />}
-            variant="outline"
-            aria-label="Injuries"
-            borderRadius="full"
-            size="lg"
-            border="none"
-            color="black"
-            bg="#EFEFF0"
-            isActive={injuries}
-            _active={{
-              bg: "black",
-              color: "white",
-            }}
-          />
-        </Tooltip>
+        <InjuredPlayerPopover players={injuredPlayers} />
       </Stack>
     </Box>
   );

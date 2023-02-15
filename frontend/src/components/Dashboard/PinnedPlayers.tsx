@@ -19,24 +19,34 @@ import {
   CircularProgress,
   Center,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import ApiService from "../../services/ApiService";
-import { ApiResponse, Player, RecoveryTracking } from "../../services/types";
+import { ApiResponse, RecoveryTracking } from "../../services/types";
 
 export const PinnedPlayers = () => {
   const [players, setPlayers] = React.useState<RecoveryTracking[]>([]);
+  const [isTimeout, setIsTimeout] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    const endpoint = `recovery`;
-    ApiService.get(endpoint).then((res: ApiResponse<RecoveryTracking[]>) => {
-      if (res.status === 200) {
-        setPlayers(res.data);
-        setLoading(false);
+    fetchRecoveryPlayers();
+  }, []);
+
+  const fetchRecoveryPlayers = async () => {
+    ApiService.getPinnedPlayers().then((response: ApiResponse<any>) => {
+      switch (response.status) {
+        case 200:
+          setPlayers(response.data);
+          setLoading(false);
+          return;
+        case 408:
+          setIsTimeout(true);
+          setLoading(false);
+          return;
       }
     });
-  }, []);
+  };
 
   const getStatArrow = (after: number, before: number) => {
     if (before > after) {
@@ -63,6 +73,13 @@ export const PinnedPlayers = () => {
           <CircularProgress isIndeterminate color="black" />
         </Center>
       )}
+      {isTimeout && (
+        <Center>
+          <Text color="gray.700">
+            Request timed out. Most likely NBA API is down.
+          </Text>
+        </Center>
+      )}
       {players.length > 0 && (
         <Box>
           <HStack alignItems="baseline">
@@ -80,7 +97,7 @@ export const PinnedPlayers = () => {
             </Tooltip>
           </HStack>
 
-          <HStack>
+          <HStack justifyContent="space-around">
             {players.map((tracking: RecoveryTracking) => (
               <Card
                 key={tracking.player.name}

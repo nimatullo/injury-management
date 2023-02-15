@@ -70,3 +70,7 @@ export interface RecoveryTracking {
   afterAvg: number;
   recoveryPercentage: number;
 }
+
+export interface PlayerInjuries extends Player {
+  injuries: Injury[];
+}

@@ -16,8 +16,7 @@ function App() {
           <Sidebar />
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path=":id/injury-report" element={<InjuryReport />} />
-            <Route path=":id/appointments" element={<Appointments />} />
+            <Route path="/injury-report/:id" element={<InjuryReport />} />
             <Route path="/appointments" element={<AllAppointments />} />
           </Routes>
         </Flex>

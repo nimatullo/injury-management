@@ -18,6 +18,7 @@ import {
 import React from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
 import ApiService from "../../services/ApiService";
+import { DateInput } from "../Form/DateInput";
 
 interface NewMeasurementModalProps {
   isOpen: boolean;
@@ -77,15 +78,15 @@ const NewMeasurementModal = ({
   callback,
 }: NewMeasurementModalProps) => {
   const [measurement, setMeasurement] = React.useState<string>("0");
-  const [measurementDate, setMeasurementDate] = React.useState<string>(
-    new Date().toISOString().split("T")[0]
+  const [measurementDate, setMeasurementDate] = React.useState<Date>(
+    new Date()
   );
 
   const handleSubmit = () => {
     const endpoint = `players/${id}/measurements/${category}`;
     const data = {
       measurement,
-      date: measurementDate,
+      date: measurementDate.toISOString(),
       exercise,
     };
     ApiService.post(endpoint, data).then((response) => {
@@ -120,13 +121,11 @@ const NewMeasurementModal = ({
             />
           </FormControl>
 
-          <FormControl my="2">
+          <FormControl my="2" zIndex={50}>
             <FormLabel>Measurement Date</FormLabel>
-            <Input
+            <DateInput
+              onChange={(date) => setMeasurementDate(date)}
               value={measurementDate}
-              onChange={(e) => setMeasurementDate(e.target.value)}
-              placeholder="Measurement date"
-              type="date"
             />
           </FormControl>
         </ModalBody>

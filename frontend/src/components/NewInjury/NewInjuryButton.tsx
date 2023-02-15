@@ -2,7 +2,7 @@ import { Button, useDisclosure, IconButton } from "@chakra-ui/react";
 import { NewInjuryModal } from "./NewInjuryModal";
 import { MdPersonalInjury } from "react-icons/md";
 
-export const NewInjuryButton = () => {
+export const NewInjuryButton = ({ callback }: { callback: () => void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -16,7 +16,7 @@ export const NewInjuryButton = () => {
         Report Injury
       </Button>
 
-      <NewInjuryModal isOpen={isOpen} onClose={onClose} />
+      <NewInjuryModal isOpen={isOpen} onClose={onClose} callback={callback} />
     </>
   );
 };
