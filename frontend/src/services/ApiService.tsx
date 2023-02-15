@@ -1,7 +1,7 @@
 import moment from "moment";
 import { ApiResponse, ApiOptions, ListItems, Appointments } from "./types";
 
-const API_URL = "http://localhost:8000/";
+const API_URL = "https://injury-management.onrender.com";
 
 class ApiService {
   private static async fetchData(
