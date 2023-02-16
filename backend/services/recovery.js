@@ -1,5 +1,5 @@
-const nba = require("nba-api-client");
 const MongoService = require("../db");
+const axios = require("axios");
 
 class Recovery {
   constructor() {
@@ -24,7 +24,6 @@ class Recovery {
 
   async generateRecoveryTracking() {
     let result = [];
-
     for (const recoveredPlayer of this.PLAYERS_TRACKED) {
       const player = await this.mongoService.getPlayerByName(
         recoveredPlayer.name
@@ -43,11 +42,7 @@ class Recovery {
   }
 
   async getAvgs(playerId, date) {
-    const before = await nba.playerBoxScores({
-      Season: "2022-23",
-      PlayerID: playerId,
-      DateTo: date,
-    });
+    const before = await this.fetchGamesBefore(playerId, date);
 
     const beforeAvg = this.getAvg(
       Object.keys(before.PlayerGameLogs)
@@ -56,11 +51,7 @@ class Recovery {
       before.PlayerGameLogs
     );
 
-    const after = await nba.playerBoxScores({
-      Season: "2022-23",
-      PlayerID: playerId,
-      DateFrom: date,
-    });
+    const after = await this.fetchGamesAfter(playerId, date);
 
     const afterAvg = this.getAvg(
       Object.keys(after.PlayerGameLogs).slice(0, this.NUMBER_OF_GAMES),
@@ -80,6 +71,85 @@ class Recovery {
         return acc + gamelog[game].NBA_FANTASY_PTS;
       }, 0) / this.NUMBER_OF_GAMES
     );
+  }
+
+  async fetchGamesBefore(playerId, date) {
+    const url = `https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=${date}&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&Period=0&PerMode=Totals&PlayerID=${playerId}&PlusMinus=N&PORound=0&Rank=N&Season=2022-23&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=&`;
+
+    const headers = {
+      Host: "stats.nba.com",
+      Referer: "https://www.nba.com",
+      Origin: "https://stats.nba.com/",
+      Connection: "keep-alive",
+      "x-nba-stats-origin": "stats",
+      "x-nba-stats-token": "true",
+      "Cache-Control": "max-age=0",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept-Language": "en-US,en;q=0.9",
+    };
+
+    const response = await axios.get(url, { headers });
+    return this.formatData(response.data);
+  }
+
+  async fetchGamesAfter(playerId, date) {
+    const url = `https://stats.nba.com/stats/playergamelogs?DateFrom=${date}&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&Period=0&PerMode=Totals&PlayerID=${playerId}&PlusMinus=N&PORound=0&Rank=N&Season=2022-23&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=&`;
+
+    const headers = {
+      Host: "stats.nba.com",
+      Referer: "https://www.nba.com",
+      Origin: "https://stats.nba.com/",
+      Connection: "keep-alive",
+      "x-nba-stats-origin": "stats",
+      "x-nba-stats-token": "true",
+      "Cache-Control": "max-age=0",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept-Language": "en-US,en;q=0.9",
+    };
+
+    const response = await axios.get(url, { headers });
+    return this.formatData(response.data);
+  }
+
+  async formatData(json) {
+    try {
+      var data = {};
+
+      var result_set = json.resultSets;
+      for (let i in result_set) {
+        var merged = {};
+        if (result_set[i].rowSet.length !== 1) {
+          var multipleRowSets = {};
+          for (let j in result_set[i].rowSet) {
+            var temp = {};
+            for (let k in result_set[i].headers) {
+              temp[result_set[i].headers[k]] = result_set[i].rowSet[j][k];
+            }
+            multipleRowSets[j] = temp;
+          }
+          data[result_set[i].name] = multipleRowSets;
+        } else {
+          for (let j in result_set[i].headers) {
+            merged[result_set[i].headers[j]] = result_set[i].rowSet[0][j];
+          }
+          data[result_set[i].name] = merged;
+        }
+      }
+
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
