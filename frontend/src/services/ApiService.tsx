@@ -120,7 +120,7 @@ class ApiService {
   }
 
   public static async getPinnedPlayers(): Promise<any> {
-    const timeout = 15000;
+    const timeout = 30000;
     const endpoint = API_URL + `recovery`;
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
