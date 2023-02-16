@@ -120,16 +120,16 @@ class ApiService {
   }
 
   public static async getPinnedPlayers(): Promise<any> {
-    const timeout = 30000;
+    // const timeout = 30000;
     const endpoint = API_URL + `recovery`;
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
+    // const controller = new AbortController();
+    // const id = setTimeout(() => controller.abort(), timeout);
 
     try {
       const response = await fetch(endpoint, {
-        signal: controller.signal,
+        // signal: controller.signal,
       });
-      clearTimeout(id);
+      // clearTimeout(id);
 
       const data = await response.json();
       return { data, status: response.status };
