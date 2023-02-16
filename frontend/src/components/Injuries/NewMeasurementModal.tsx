@@ -12,6 +12,15 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -27,6 +36,7 @@ interface NewMeasurementModalProps {
   exercise: string;
   id: string;
   callback?: () => void;
+  lastExerciseDate?: Date;
 }
 
 interface NewMeasurementButtonProps {
@@ -34,6 +44,7 @@ interface NewMeasurementButtonProps {
   exercise: string;
   id: string;
   callback?: () => void;
+  lastExerciseDate?: Date;
 }
 
 export const NewMeasurementButton = ({
@@ -41,6 +52,7 @@ export const NewMeasurementButton = ({
   exercise,
   id,
   callback,
+  lastExerciseDate,
 }: NewMeasurementButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -64,6 +76,7 @@ export const NewMeasurementButton = ({
         onClose={onClose}
         callback={callback}
         id={id}
+        lastExerciseDate={lastExerciseDate}
       />
     </>
   );
@@ -76,8 +89,9 @@ const NewMeasurementModal = ({
   exercise,
   id,
   callback,
+  lastExerciseDate,
 }: NewMeasurementModalProps) => {
-  const [measurement, setMeasurement] = React.useState<string>("0");
+  const [measurement, setMeasurement] = React.useState<number>(0);
   const [measurementDate, setMeasurementDate] = React.useState<Date>(
     new Date()
   );
@@ -85,10 +99,11 @@ const NewMeasurementModal = ({
   const handleSubmit = () => {
     const endpoint = `players/${id}/measurements/${category}`;
     const data = {
-      measurement,
+      measurement: measurement.toString(),
       date: measurementDate.toISOString(),
       exercise,
     };
+
     ApiService.post(endpoint, data).then((response) => {
       if (response.status === 200) {
         onClose();
@@ -113,17 +128,34 @@ const NewMeasurementModal = ({
         <ModalBody>
           <FormControl my="2">
             <FormLabel>Measurement</FormLabel>
-            <Input
+            <NumberInput
               value={measurement}
-              onChange={(e) => setMeasurement(e.target.value)}
-              placeholder="Enter new measurement"
-              type="number"
-            />
+              onChange={(value) => setMeasurement(parseInt(value))}
+              max={100}
+              min={0}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
+
+          <FormControl my="2">
+            <FormLabel>Level of pain</FormLabel>
+            <Slider defaultValue={0} max={10}>
+              <SliderTrack>
+                <SliderFilledTrack bg="black" />
+              </SliderTrack>
+              <SliderThumb boxSize={5} />
+            </Slider>
           </FormControl>
 
           <FormControl my="2" zIndex={50}>
             <FormLabel>Measurement Date</FormLabel>
             <DateInput
+              beginDate={lastExerciseDate}
               onChange={(date) => setMeasurementDate(date)}
               value={measurementDate}
             />

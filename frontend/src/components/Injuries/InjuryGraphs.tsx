@@ -19,6 +19,7 @@ export const InjuryGraphs = ({ cb }: { cb: () => void }) => {
     React.useState("Single Leg Balance");
 
   const [graphData, setGraphData] = React.useState<Exercise[]>([]);
+  const [lastExerciseDate, setLastExerciseDate] = React.useState<Date>();
 
   const params = useParams();
 
@@ -34,6 +35,9 @@ export const InjuryGraphs = ({ cb }: { cb: () => void }) => {
     const endpoint = `players/${params.id}/measurements/${selectedExcersise}`;
     ApiService.get(endpoint).then((res: ApiResponse<Exercise[]>) => {
       setGraphData(res.data);
+      if (res.data.length > 0) {
+        setLastExerciseDate(new Date(res.data[res.data.length - 1].date));
+      }
     });
   };
 
@@ -73,6 +77,7 @@ export const InjuryGraphs = ({ cb }: { cb: () => void }) => {
             fetchGraphData();
             cb();
           }}
+          lastExerciseDate={lastExerciseDate}
         />
       </Flex>
       <Flex

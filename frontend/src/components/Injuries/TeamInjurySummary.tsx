@@ -74,7 +74,7 @@ export const TeamInjurySummary = (props: any) => {
                         borderRadius: "md",
                       }}
                       onClick={() => {
-                        navigate(player.id + "/injury-report");
+                        navigate(`/injury-report/${player.id}`);
                       }}
                     >
                       <Td>

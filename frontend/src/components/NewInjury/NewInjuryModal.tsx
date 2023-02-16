@@ -80,6 +80,7 @@ export const NewInjuryModal = ({
           <FormControl my="2">
             <FormLabel>Player name</FormLabel>
             <AutoSuggestionField
+              placeholder="Start typing player name..."
               options={players}
               onSelect={(value) => setPlayer(value)}
             />
@@ -88,7 +89,9 @@ export const NewInjuryModal = ({
           <FormControl my="2">
             <FormLabel>Injury</FormLabel>
             <AutoSuggestionField
+              disabled={selectedPlayerId === ""}
               options={injuries}
+              placeholder="Enter injury name"
               onSelect={(value) => setInjury(value)}
             />
           </FormControl>

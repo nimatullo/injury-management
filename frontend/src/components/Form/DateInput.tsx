@@ -8,6 +8,7 @@ interface DateInputProps {
   value: Date;
   onChange: (date: Date) => void;
   showTimeSelect?: boolean;
+  beginDate?: Date;
 }
 
 const customDateInput = ({ value, onClick, onChange }: any, ref: any) => (
@@ -27,10 +28,12 @@ export const DateInput = ({
   value,
   onChange,
   showTimeSelect = false,
+  beginDate,
 }: DateInputProps) => {
   return (
     <InputGroup>
       <ReactDatePicker
+        minDate={beginDate}
         selected={value}
         onChange={onChange}
         showTimeSelect={showTimeSelect}
