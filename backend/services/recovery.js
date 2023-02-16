@@ -6,23 +6,19 @@ class Recovery {
     this.collection = "Recovery";
     this.mongoService = new MongoService();
     this.NUMBER_OF_GAMES = 5;
-    this.PLAYERS_TRACKED = [
-      {
-        name: "T.J. Warren",
-        date: "01/27/2023",
-      },
-      {
-        name: "Yuta Watanabe",
-        date: "02/07/2023",
-      },
-      {
-        name: "Ben Simmons",
-        date: "01/26/2023",
-      },
-    ];
+  }
+
+  async get() {
+    return await this.mongoService.getAll(this.collection);
   }
 
   async generateRecoveryTracking() {
+    // const playerName = this.PLAYERS_TRACKED[0].name;
+    // const playerDate = this.PLAYERS_TRACKED[0].date;
+    // const player = await this.mongoService.getPlayerByName(playerName);
+
+    // return this.fetchGamesBefore(player.realId, playerDate);
+
     let result = [];
     for (const recoveredPlayer of this.PLAYERS_TRACKED) {
       const player = await this.mongoService.getPlayerByName(

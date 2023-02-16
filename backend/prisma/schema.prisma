@@ -61,3 +61,12 @@ model Treatment {
   injury        Injury?       @relation(fields: [injuryId], references: [id])
   injuryId      String?       @db.ObjectId
 }
+
+model Recovery {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  photo              String
+  beforeAvg          Float
+  afterAvg           Float
+  recoveryPercentage String
+}

@@ -6,7 +6,6 @@ import {
   HStack,
   Image,
   Progress,
-  ProgressLabel,
   Stack,
   Text,
   Icon,
@@ -19,7 +18,7 @@ import {
   CircularProgress,
   Center,
 } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React from "react";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import ApiService from "../../services/ApiService";
 import { ApiResponse, RecoveryTracking } from "../../services/types";
@@ -30,8 +29,18 @@ export const PinnedPlayers = () => {
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    fetchRecoveryPlayers();
+    fetchRecoveryPlayersDemo();
   }, []);
+
+  const fetchRecoveryPlayersDemo = async () => {
+    const endpoint = "recovery";
+    ApiService.get(endpoint).then((response: ApiResponse<RecoveryTracking>) => {
+      if (response.status === 200) {
+        setPlayers(response.data);
+        setLoading(false);
+      }
+    });
+  };
 
   const fetchRecoveryPlayers = async () => {
     ApiService.getPinnedPlayers().then((response: ApiResponse<any>) => {
@@ -100,21 +109,21 @@ export const PinnedPlayers = () => {
           <HStack justifyContent="space-around">
             {players.map((tracking: RecoveryTracking) => (
               <Card
-                key={tracking.player.name}
+                key={tracking.id}
                 background="#FAFAFC"
                 border="1px solid #E2E8F0"
               >
                 <CardBody>
                   <Image
-                    alt={tracking.player.name}
+                    alt={tracking.name}
                     borderRadius="lg"
-                    src={tracking.player.photo}
+                    src={tracking.photo}
                     bg="white"
                     border="1px solid #E2E8F0"
                     objectFit="cover"
                   />
                   <Stack>
-                    <Text fontWeight="bold">{tracking.player.name}</Text>
+                    <Text fontWeight="bold">{tracking.name}</Text>
                     <HStack alignItems="flex-start">
                       <Stat>
                         <StatLabel>Before Injury</StatLabel>

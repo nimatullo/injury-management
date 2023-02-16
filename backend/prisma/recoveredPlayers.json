@@ -1,0 +1,23 @@
+[
+  {
+    "name": "T.J. Warren",
+    "photo": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/203933.png",
+    "beforeAvg": 16.18,
+    "afterAvg": 7.6,
+    "recoveryPercentage": "46.97"
+  },
+  {
+    "name": "Yuta Watanabe",
+    "photo": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1629139.png",
+    "beforeAvg": 5.88,
+    "afterAvg": 4.84,
+    "recoveryPercentage": "82.31"
+  },
+  {
+    "name": "Ben Simmons",
+    "photo": "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1627732.png",
+    "beforeAvg": 26.139999999999997,
+    "afterAvg": 15.180000000000001,
+    "recoveryPercentage": "58.07"
+  }
+]

@@ -6,12 +6,12 @@ const service = new RecoveryService();
 
 router.get("/", async (req, res) => {
   service
-    .generateRecoveryTracking()
+    .get()
     .then((data) => {
       res.json(data);
     })
     .catch((err) => {
-      res.status(500).json(err);
+      res.status(500).json(err.message);
     });
 });
 

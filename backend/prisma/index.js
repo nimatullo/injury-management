@@ -7,8 +7,27 @@ const prisma = new PrismaClient({
 
 async function main() {
   await prisma.$connect();
+  // addRecoveredPlayersToDB();
   // generateData();
   // addPlayersToDB();
+}
+
+async function addRecoveredPlayersToDB() {
+  const playerJson = JSON.parse(
+    await readFile("recoveredPlayers.json", "utf-8")
+  );
+
+  playerJson.forEach(async (player) => {
+    await prisma.recovery.create({
+      data: {
+        name: player.name,
+        photo: player.photo,
+        beforeAvg: player.beforeAvg,
+        afterAvg: player.afterAvg,
+        recoveryPercentage: player.recoveryPercentage,
+      },
+    });
+  });
 }
 
 async function addPlayersToDB() {

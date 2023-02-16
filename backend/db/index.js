@@ -1,5 +1,4 @@
 const { db } = require("../prisma");
-const moment = require("moment");
 
 class MongoService {
   constructor() {
@@ -65,6 +64,19 @@ class MongoService {
             id: id,
           },
         })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getAll(collection) {
+    return new Promise((resolve, reject) => {
+      this.db[collection]
+        .findMany()
         .then((data) => {
           resolve(data);
         })

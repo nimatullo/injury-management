@@ -62,10 +62,9 @@ export interface Exercise {
 }
 
 export interface RecoveryTracking {
-  player: {
-    name: string;
-    photo: string;
-  };
+  id: string;
+  name: string;
+  photo: string;
   beforeAvg: number;
   afterAvg: number;
   recoveryPercentage: number;
