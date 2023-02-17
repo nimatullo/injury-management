@@ -18,7 +18,7 @@ import {
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
-import { ApiResponse, Player } from "../../services/types";
+import { Player } from "../../services/types";
 import { NewInjuryButton } from "../NewInjury/NewInjuryButton";
 
 export const TeamInjurySummary = (props: any) => {

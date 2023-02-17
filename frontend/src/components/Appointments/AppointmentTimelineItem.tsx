@@ -12,7 +12,15 @@ import {
 } from "planby";
 import { AppointmentEditModal } from "./AppointmentEditModal";
 
-export const AppointmentTimelineItem = ({ program, ...rest }: ProgramItem) => {
+interface ProgramItemWithCallback extends ProgramItem {
+  cb: () => void;
+}
+
+export const AppointmentTimelineItem = ({
+  program,
+  cb,
+  ...rest
+}: ProgramItemWithCallback) => {
   const { styles, formatTime, set12HoursTimeFormat, isLive, isMinWidth } =
     useProgram({
       program,
@@ -47,7 +55,10 @@ export const AppointmentTimelineItem = ({ program, ...rest }: ProgramItem) => {
 
             <AppointmentEditModal
               isOpen={isOpen}
-              onClose={onClose}
+              onClose={() => {
+                onClose();
+                cb();
+              }}
               appointmentId={data.id}
             />
           </ProgramStack>

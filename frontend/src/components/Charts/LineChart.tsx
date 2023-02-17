@@ -35,6 +35,8 @@ export const LineChart = ({ graphData }: LineChartProps) => {
     (): AxisOptions<RangeOfMotionData> => ({
       getValue: (datum) => new Date(datum.date),
       tickCount: 8,
+      min: new Date(graphData[0].date),
+      max: new Date(graphData[graphData.length - 1].date),
     }),
     []
   );
@@ -44,6 +46,7 @@ export const LineChart = ({ graphData }: LineChartProps) => {
       {
         getValue: (datum) => Number(datum.measurement),
         tickCount: 10,
+        elementType: "area",
       },
     ],
     []

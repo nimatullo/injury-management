@@ -24,7 +24,6 @@ export const AppointmentEditModal = ({
   isOpen,
   onClose,
   appointmentId,
-  cb,
 }: any) => {
   const [notes, setNotes] = React.useState<string>("");
   const [date, setDate] = React.useState<string>("");
@@ -54,7 +53,6 @@ export const AppointmentEditModal = ({
 
     ApiService.put(endpoint, data).then((res) => {
       if (res.status === 200) {
-        cb();
         onClose();
       }
     });
@@ -64,7 +62,6 @@ export const AppointmentEditModal = ({
     const endpoint = `appointments/${appointmentId}`;
     ApiService.delete(endpoint).then((res) => {
       if (res.status === 200) {
-        cb();
         onClose();
       }
     });

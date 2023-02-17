@@ -14,7 +14,6 @@ export const AllAppointments = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [date, setDate] = React.useState(new Date());
 
-  // Memoized start and end dates
   const startDate = React.useMemo(() => {
     return moment(date).startOf("day").toDate();
   }, [date]);
@@ -22,10 +21,6 @@ export const AllAppointments = () => {
   const endDate = React.useMemo(() => {
     return moment(date).endOf("day").toDate();
   }, [date]);
-
-  React.useEffect(() => {
-    handleFetchResources();
-  }, []);
 
   const handleFetchResources = async () => {
     setIsLoading(true);
@@ -66,12 +61,17 @@ export const AllAppointments = () => {
 
   React.useEffect(() => {
     handleFetchResources();
+
+    return () => {
+      setAppointments([]);
+      setPlayers([]);
+    };
   }, [date]);
 
   return (
     <Grid templateColumns="repeat(5, 1fr)">
       <GridItem h="100vh" colSpan={4}>
-        {appointments.length > 0 ? (
+        {appointments.length > 0 && getEpgProps ? (
           <Epg isLoading={isLoading} {...getEpgProps()}>
             <Layout
               {...getLayoutProps()}
@@ -82,6 +82,7 @@ export const AllAppointments = () => {
                 <AppointmentTimelineItem
                   key={program.data.id}
                   program={program}
+                  cb={handleFetchResources}
                   {...rest}
                 />
               )}
