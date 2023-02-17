@@ -17,6 +17,7 @@ import {
   StatArrow,
   CircularProgress,
   Center,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import React from "react";
 import { BsFillInfoCircleFill } from "react-icons/bs";
@@ -90,7 +91,7 @@ export const PinnedPlayers = () => {
         </Center>
       )}
       {players.length > 0 && (
-        <Box>
+        <Box overflowY="auto" h="100%">
           <HStack alignItems="baseline">
             <Heading size="md" mb="5">
               Recovery Tracking

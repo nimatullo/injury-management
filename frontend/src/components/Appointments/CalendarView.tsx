@@ -62,7 +62,7 @@ export const CalendarView = ({
       <Box overflowY="auto">
         {allAppointments &&
           Object.keys(allAppointments).map((date) => (
-            <Box>
+            <Box key={date}>
               <Heading size="sm">{formatDate(date)}</Heading>
               <Divider />
               <UnorderedList p="2" spacing="1">

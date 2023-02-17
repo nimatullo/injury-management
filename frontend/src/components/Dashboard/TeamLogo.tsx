@@ -42,10 +42,6 @@ interface TeamLogoProps {
 }
 
 export const TeamLogo = ({ team }: TeamLogoProps) => {
-  React.useEffect(() => {
-    console.log(team);
-  });
-
   const Logo = NbaLogos[team];
   return <Logo />;
 };
