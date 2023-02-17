@@ -14,6 +14,15 @@ export const AllAppointments = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [date, setDate] = React.useState(new Date());
 
+  // Memoized start and end dates
+  const startDate = React.useMemo(() => {
+    return moment(date).startOf("day").toDate();
+  }, [date]);
+
+  const endDate = React.useMemo(() => {
+    return moment(date).endOf("day").toDate();
+  }, [date]);
+
   React.useEffect(() => {
     handleFetchResources();
   }, []);
@@ -49,8 +58,8 @@ export const AllAppointments = () => {
     itemHeight: 100,
     isSidebar: true,
     isTimeline: true,
-    startDate: moment(date).startOf("day").toDate(),
-    endDate: moment(date).endOf("day").toDate(),
+    startDate: startDate,
+    endDate: endDate,
     isBaseTimeFormat: true,
     theme: timelineTheme,
   });

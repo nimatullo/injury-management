@@ -340,6 +340,23 @@ class MongoService {
     }
   }
 
+  async deleteAppointment(appointmentId) {
+    return new Promise((resolve, reject) => {
+      this.db.appointment
+        .delete({
+          where: {
+            id: appointmentId,
+          },
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async getUpcomingAppointments(playerId) {
     return new Promise((resolve, reject) => {
       this.db.player
@@ -524,9 +541,9 @@ class MongoService {
 
     const randomPlayers = [];
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       const randomIndex = Math.floor(Math.random() * allPlayers.length);
-      randomPlayers.push(allPlayers[randomIndex]);
+      randomPlayers.push(allPlayers[randomIndex].name);
       allPlayers.splice(randomIndex, 1);
     }
 

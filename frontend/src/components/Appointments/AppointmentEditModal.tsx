@@ -3,6 +3,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -53,8 +54,18 @@ export const AppointmentEditModal = ({
 
     ApiService.put(endpoint, data).then((res) => {
       if (res.status === 200) {
-        onClose();
         cb();
+        onClose();
+      }
+    });
+  };
+
+  const handleDelete = () => {
+    const endpoint = `appointments/${appointmentId}`;
+    ApiService.delete(endpoint).then((res) => {
+      if (res.status === 200) {
+        cb();
+        onClose();
       }
     });
   };
@@ -96,11 +107,16 @@ export const AppointmentEditModal = ({
               />
             </FormControl>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="black" mr={3} onClick={handleUpdate}>
-              Update Appointment
+          <ModalFooter display="flex" justifyContent="space-between">
+            <Button colorScheme="red" variant="outline" onClick={handleDelete}>
+              Delete
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <HStack>
+              <Button colorScheme="black" onClick={handleUpdate}>
+                Update Appointment
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </HStack>
           </ModalFooter>
         </ModalContent>
       </Modal>

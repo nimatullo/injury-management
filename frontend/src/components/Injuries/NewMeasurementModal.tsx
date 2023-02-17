@@ -22,6 +22,7 @@ import {
   SliderThumb,
   SliderTrack,
   Text,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -96,6 +97,9 @@ const NewMeasurementModal = ({
     new Date()
   );
 
+  const [sliderValue, setSliderValue] = React.useState<number>(0);
+  const [showTooltip, setShowTooltip] = React.useState<boolean>(false);
+
   const handleSubmit = () => {
     const endpoint = `players/${id}/measurements/${category}`;
     const data = {
@@ -112,6 +116,16 @@ const NewMeasurementModal = ({
         }
       }
     });
+  };
+
+  const getColorBasedOnSliderValue = (value: number) => {
+    if (value < 4) {
+      return "green.500";
+    } else if (value < 7) {
+      return "yellow.500";
+    } else {
+      return "red.500";
+    }
   };
 
   return (
@@ -144,11 +158,25 @@ const NewMeasurementModal = ({
 
           <FormControl my="2">
             <FormLabel>Level of pain</FormLabel>
-            <Slider defaultValue={0} max={10}>
+            <Slider
+              onChange={(value) => setSliderValue(value)}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              defaultValue={0}
+              max={10}
+            >
               <SliderTrack>
                 <SliderFilledTrack bg="black" />
               </SliderTrack>
-              <SliderThumb boxSize={5} />
+              <Tooltip
+                hasArrow
+                label={`${sliderValue}/10`}
+                placement="top"
+                isOpen={showTooltip}
+                bg={getColorBasedOnSliderValue(sliderValue)}
+              >
+                <SliderThumb boxSize={5} />
+              </Tooltip>
             </Slider>
           </FormControl>
 

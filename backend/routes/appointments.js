@@ -81,6 +81,22 @@ router.get("/:appointmentId", async (req, res) => {
     });
 });
 
+router.delete("/:appointmentId", async (req, res) => {
+  const { appointmentId } = req.params;
+  if (!appointmentId) {
+    res.status(400).json({ message: "AppointmentId is required" });
+    return;
+  }
+  service
+    .delete(appointmentId)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 router.get("/date/:date", async (req, res) => {
   const { date } = req.params;
   if (!date) {

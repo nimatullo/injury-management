@@ -15,16 +15,33 @@ import { ApiResponse, Player } from "../../services/types";
 import { messages } from "./messages";
 
 export const ChatDemo = () => {
-  const [players, setPlayers] = React.useState<any>([]);
+  const [playerNames, setPlayerNames] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     const endpoint = `players/random`;
-    ApiService.get(endpoint).then((res: ApiResponse<Player[]>) => {
+    ApiService.get(endpoint).then((res: ApiResponse<string[]>) => {
       if (res.status === 200) {
-        setPlayers(res.data);
+        setPlayerNames(res.data);
       }
     });
   }, []);
+
+  const getAvatarBgColor = () => {
+    // Return random pastel color
+    const colors = [
+      "red.300",
+      "orange.300",
+      "yellow.300",
+      "green.300",
+      "teal.300",
+      "blue.300",
+      "cyan.300",
+      "purple.300",
+      "pink.300",
+      "green.300",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
 
   return (
     <Card
@@ -39,24 +56,24 @@ export const ChatDemo = () => {
       </CardHeader>
 
       <CardBody>
-        {players.length > 0 &&
-          players.map((player: any) => {
+        {playerNames.length > 0 &&
+          playerNames.map((name: string) => {
             return (
               <HStack
-                key={player.id}
+                key={name}
                 w="100%"
                 borderBottomWidth="1px"
                 borderColor="gray.200"
                 p="2"
               >
                 <Avatar
-                  name={player.name}
+                  name={name}
                   size="md"
-                  backgroundColor="gray.300"
+                  backgroundColor={getAvatarBgColor()}
                 />
                 <Flex flexDirection="column">
                   <Heading size="sm" color="gray.800">
-                    {player.name}
+                    {name}
                   </Heading>
                   <Text color="gray.600" fontSize="sm">
                     {messages[Math.floor(Math.random() * messages.length)]}

@@ -20,6 +20,19 @@ class AppointmentService {
     });
   }
 
+  async delete(appointmentId) {
+    return new Promise((resolve, reject) => {
+      this.mongoService
+        .deleteAppointment(appointmentId)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async getAppointment(appointmentId) {
     return new Promise((resolve, reject) => {
       this.mongoService
