@@ -67,7 +67,7 @@ export const CalendarView = ({
               <Divider />
               <UnorderedList p="2" spacing="1">
                 {allAppointments[date].map((appointment: Appointments) => (
-                  <ListItem>
+                  <ListItem key={appointment.id}>
                     <Text color="gray.900">{appointment.player.name}</Text>
                     <Text fontSize="sm" color="gray.500">
                       {appointment.forTreatment.treatmentName}

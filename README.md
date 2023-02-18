@@ -29,7 +29,7 @@ This website is an injury and rehabilitation management platform designed for NB
 
 <details>
 <summary>How it's calculated</summary>
-I get the 5 game average prior to the player's injury and then get the average after their recovery. Then I measure how far they are from their level of play prior to the injury.
+First, I get the Fantasy Points 5-game average prior to the player's injury. Then I get the average of the games after they have recovered. This allows me to measure the differences in their performance before and after the injury.
 
 > I wanted to use either Player Efficiency Rating or another advanced statistic that incoporates various other stats. However, due to the limitations of the NBA API, I did not have access to those particular statistics, so I resorted to using NBA Fantasy Points instead.
 
@@ -48,8 +48,8 @@ When scheduling a new appointment, the treatment field auto completes for all tr
 
 Some parts of the website are just included to show ideas that I had that were out of the scope of the project. These include:
 
-- Messages card on the dashboard. The idea was that there would be a second player-facing website that would allow players to message the team doctors and confirm appointments. That is also why on the "Today's Appointments" card, there is a status on the left of the appointment time.
+- "Messages" card on the dashboard. The idea was that there would be a second player-facing website that would allow players to message the team doctors and confirm appointments. That is also why on the "Today's Appointments" card, there is a status on the left of the appointment time.
 - Pain level on the exercise tracking page. This would be would be easy to implement but I didn't in the interest of time.
-- Recovery tracking does have data behind it but the NBA API blacklists IPs from hosting providers so I wasn't able to get the most up to date data. The data is up to 02/16/2023.
+- "Recovery tracking" does have data behind it but the NBA API blacklists IPs from hosting providers so I wasn't able to get the most up to date data. The data is up to 02/16/2023.
 
-On the All Appointments page, there is a bug that requires you to click the date on the calendar twice to get the appointments for that day. I was unable to figure out why this was happening.
+On the "All Appointments" page, there is a bug that requires you to click the date on the calendar twice to get the appointments for that day. I was unable to figure out why this was happening.

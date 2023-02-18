@@ -5,6 +5,7 @@ import ApiService from "../../services/ApiService";
 import { useParams } from "react-router-dom";
 import { NewMeasurementButton } from "./NewMeasurementModal";
 import { ApiResponse, Exercise } from "../../services/types";
+import { LineChartWGradient } from "../Charts/LineChartWGradient";
 
 const categoryToExcersise: any = {
   Balance: ["Single Leg Balance", "Double Leg Balance"],
@@ -86,7 +87,8 @@ export const InjuryGraphs = ({ cb }: { cb: () => void }) => {
         position="absolute"
         right="0"
       ></Flex>
-      <LineChart graphData={graphData} />
+      <LineChartWGradient exercise={selectedExcersise} graphData={graphData} />
+      {/* <LineChart graphData={graphData} /> */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { Heading, Table, Td, Text, Tr } from "@chakra-ui/react";
+import { Heading, Table, Tbody, Td, Text, Tr } from "@chakra-ui/react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
@@ -42,19 +42,21 @@ export const ExercisesSummary = ({ playerId }: ExercisesSummaryProps) => {
         Latest Exercises
       </Heading>
       <Table variant="simple" size="sm" borderColor="transparent">
-        {exercises.map((exercise) => (
-          <Tr>
-            <Td border="0px" py="1" paddingStart="0">
-              <Heading size="sm">{exercise.name}</Heading>
-            </Td>
-            <Td border="0px" py="1" paddingStart="0" isNumeric>
-              {exercise.measurement}
-            </Td>
-            <Td border="0px" py="1" paddingStart="0" isNumeric>
-              <Text fontSize="sm">{formatDate(exercise.date)}</Text>
-            </Td>
-          </Tr>
-        ))}
+        <Tbody>
+          {exercises.map((exercise) => (
+            <Tr key={exercise.id}>
+              <Td border="0px" py="1" paddingStart="0">
+                <Heading size="sm">{exercise.name}</Heading>
+              </Td>
+              <Td border="0px" py="1" paddingStart="0" isNumeric>
+                {exercise.measurement}
+              </Td>
+              <Td border="0px" py="1" paddingStart="0" isNumeric>
+                <Text fontSize="sm">{formatDate(exercise.date)}</Text>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
       </Table>
     </>
   ) : (
