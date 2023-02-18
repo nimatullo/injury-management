@@ -1,5 +1,4 @@
 import { Box, Flex, FormLabel, Select } from "@chakra-ui/react";
-import { LineChart } from "../Charts/LineChart";
 import React from "react";
 import ApiService from "../../services/ApiService";
 import { useParams } from "react-router-dom";
@@ -88,7 +87,6 @@ export const InjuryGraphs = ({ cb }: { cb: () => void }) => {
         right="0"
       ></Flex>
       <LineChartWGradient exercise={selectedExcersise} graphData={graphData} />
-      {/* <LineChart graphData={graphData} /> */}
     </>
   );
 };
