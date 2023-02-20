@@ -102,7 +102,7 @@ export const AllAppointments = () => {
           </Center>
         )}
       </GridItem>
-      <GridItem w="20vw" overflowY="auto">
+      <GridItem h="100vh" w="20vw" overflowY="auto">
         <CalendarView
           timelineFetchCallback={handleFetchResources}
           date={date}
