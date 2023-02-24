@@ -59,7 +59,7 @@ export const CalendarView = ({
     <Box p="1em">
       <Calendar locale="en-US" onChange={setDate} value={date} />
       <NewAppointmentButton cb={handleFetchAppointments} />
-      <Box overflowY="auto">
+      <Box>
         {allAppointments &&
           Object.keys(allAppointments).map((date) => (
             <Box key={date}>
