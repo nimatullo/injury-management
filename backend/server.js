@@ -8,7 +8,7 @@ const PORT = 8000 || process.env.PORT;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev"));
+app.use(morgan("combined"));
 
 // Routes
 const players = require("./routes/players");
