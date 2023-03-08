@@ -7,6 +7,7 @@ const service = new RecoveryService();
 router.get("/", async (req, res) => {
   service
     .get()
+    // .generateRecoveryTracking()
     .then((data) => {
       res.json(data);
     })

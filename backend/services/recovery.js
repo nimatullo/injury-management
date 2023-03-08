@@ -6,6 +6,20 @@ class Recovery {
     this.collection = "Recovery";
     this.mongoService = new MongoService();
     this.NUMBER_OF_GAMES = 5;
+    this.PLAYERS_TRACKED = [
+      {
+        name: "T.J. Warren",
+        date: "01/27/2023",
+      },
+      {
+        name: "Yuta Watanabe",
+        date: "02/07/2023",
+      },
+      {
+        name: "Ben Simmons",
+        date: "01/26/2023",
+      },
+    ];
   }
 
   async get() {
