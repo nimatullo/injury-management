@@ -155,7 +155,7 @@ class ApiService {
     return fetch(endpoint)
       .then((response) => response.json())
       .then((data) => {
-        const games = data.lscd[1].mscd.g;
+        const games = data.lscd[2].mscd.g;
         const nextGame = games.find((game: any) => {
           const gameDate = new Date(game.gdte);
           return (
